@@ -152,6 +152,124 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Java类继承" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/27/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/">Java类继承</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/27/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/" class="archive-article-date">
+  	<time datetime="2020-02-27T06:09:30.484Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Java类继承"><a href="#Java类继承" class="headerlink" title="Java类继承"></a>Java类继承</h1><p><strong><em>继承一般发生在同一包之间</em></strong></p>
+<ul>
+<li>访问修饰符总结：<ul>
+<li>private：本类</li>
+<li>默认（firendly）：本类、同包</li>
+<li>protected：本类、同包、子类</li>
+<li>public：本类、同包、子类、其他</li>
+</ul>
+</li>
+</ul>
+<h2 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h2><ol>
+<li><p>子类通过super调用父类构造函数，在子类构造函数的第一行使用；</p>
+<p><strong>super的两个用途：</strong></p>
+<ul>
+<li><p>调用父类构造器</p>
+</li>
+<li><p>调用超类方法（子类的方法不能够直接访问超类的私有域，因此访问私有域时需要调用父类的公有方法作为接口）</p>
+<p><em>不能访问父类private成员</em></p>
+</li>
+</ul>
+</li>
+<li><p>子类构造函数中没有显式地调用父类构造器时，会自动的调用父类的无参构造函数；当父类不存在无参构造函数时即报错；</p>
+</li>
+</ol>
+<h2 id="覆盖方法（Override）"><a href="#覆盖方法（Override）" class="headerlink" title="覆盖方法（Override）"></a>覆盖方法（Override）</h2><p>覆盖一定在继承中发生，方法值、参数表完全相同，返回值相同或是其子类，访问权限不能严于父类；注意与重载(Overload)区分。</p>
+<ul>
+<li>instanceof：用于判断类，常和强制类型转换（父类转换为子类）结合使用。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Pet pet=<span class="keyword">new</span> Dog(); <span class="comment">//自动类型转换，由上到下</span></span><br><span class="line"></span><br><span class="line">Dog dog=(Dog) pet;</span><br><span class="line"></span><br><span class="line">Penguin png=(Penguin) pet;<span class="comment">//报错，必须转换为真实类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(pet instanced Penguin)&#123;</span><br><span class="line"></span><br><span class="line">	Penguin png=(Penguin) pet;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>final修饰符：<ul>
+<li>修饰的类不能再被继承</li>
+<li>修饰的方法不能被覆盖</li>
+<li>修饰的变量将变成常量，只能在初始化时进行赋值</li>
+</ul>
+</li>
+</ul>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><ol>
+<li><p>“is-a”规则(置换规则)：使用超类对象的任何地方都可以用子类对象置换</p>
+</li>
+<li><p>多态的实现思路：</p>
+<ul>
+<li>子类继承父类</li>
+<li>子类重写方法</li>
+<li>超类引用指向子类对象</li>
+</ul>
+<p><strong><em>超类引用不可以调用子类特有方法</em></strong></p>
+</li>
+<li><p>多态的实现形式：</p>
+<ul>
+<li>使用父类作为方法形参</li>
+<li>使用父类作为方法返回值</li>
+</ul>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/27/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hexo学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
