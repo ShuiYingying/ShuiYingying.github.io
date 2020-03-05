@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Simy的博客</title>
+  <title>数据库学习笔记-2 | Simy的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Simy的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="关系数据库的基本操作就是增删改查，即CRUD：Create、Retrieve、Update、Delete。增、删、查、改，对应的SQL语句分别是：  SELECT：查询已有记录   INSERT：插入新记录； UPDATE：更新已有记录； DELETE：删除已有记录。  1. 查询 基本查询：SELECT * FROM &lt;表名&gt;  条件查询：SELECT * FROM &lt;表名&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库学习笔记-2">
+<meta property="og:url" content="http://yoursite.com/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/index.html">
 <meta property="og:site_name" content="Simy的博客">
+<meta property="og:description" content="关系数据库的基本操作就是增删改查，即CRUD：Create、Retrieve、Update、Delete。增、删、查、改，对应的SQL语句分别是：  SELECT：查询已有记录   INSERT：插入新记录； UPDATE：更新已有记录； DELETE：删除已有记录。  1. 查询 基本查询：SELECT * FROM &lt;表名&gt;  条件查询：SELECT * FROM &lt;表名&amp;g">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-04T06:35:08.000Z">
+<meta property="article:modified_time" content="2020-03-05T06:32:23.710Z">
 <meta property="article:author" content="Simy">
+<meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Simy的博客" type="application/atom+xml">
@@ -144,173 +149,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-数据库学习笔记-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-数据库学习笔记-2" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/">数据库学习笔记-3</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/" class="archive-article-date">
-  	<time datetime="2020-03-05T06:33:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在命令行输入<code>mysql -u root -p</code>，根据提示输入密码（root口令），连接上MySQL Server，提示符变为<code>mysql&gt;</code>；输入<code>exit</code>断开连接(服务器仍运行)。  </p>
-<p><em>命令行程序mysql实际上是MySQL Client，在客户端输入的SQL语句通过TCP连接发送到MySQL Server，默认端口号是3306。MySQL Server的可执行程序是mysqld，在后台运行。</em></p>
-<p>也可以只安装MySQL Client，连接到远程的MySQL Server，用<code>-h</code>指定IP或域名：<code>mysql -h 10.0.1.99 -u root -p</code></p>
-<h3 id="1-管理MySQL"><a href="#1-管理MySQL" class="headerlink" title="1. 管理MySQL"></a>1. 管理MySQL</h3><p>可视化图形界面:<a href="https://dev.mysql.com/downloads/workbench/" target="_blank" rel="noopener">MySQL Workbench</a>。</p>
-<blockquote>
-<p>MySQL Workbench可以用可视化的方式查询、创建和修改数据库表，但是，归根到底，MySQL Workbench是一个图形客户端，它对MySQL的操作仍然是发送SQL语句并执行。因此，本质上，MySQL Workbench和MySQL Client命令行都是客户端，和MySQL交互，唯一的接口就是SQL。</p>
-<p>因此，MySQL提供了大量的SQL语句用于管理。虽然可以使用MySQL Workbench图形界面来直接管理MySQL，但是，很多时候，通过SSH远程连接时，只能使用SQL命令，所以，了解并掌握常用的SQL管理操作是必须的。</p>
-</blockquote>
-<ul>
-<li><p>数据库</p>
-<ul>
-<li><p>显示所有数据库：<code>SHOW DATABASES;</code></p>
-<p>其中，<code>information_schema</code>、<code>mysql</code>、<code>performance_schema</code>和<code>sys</code>是系统库</p>
-</li>
-<li><p>创建数据库：<code>CREATE DATABASE test;</code></p>
-</li>
-<li><p>删除数据库：<code>DROP DATABSE test;</code></p>
-<p>该数据库所有的表都会被删除。</p>
-</li>
-<li><p>切换数据库：<code>USE test;</code></p>
-</li>
-</ul>
-</li>
-<li><p>表</p>
-<ul>
-<li><p>显示当前数据库所有的表：<code>SHOW TABLES;</code></p>
-</li>
-<li><p>查看一个表的结构：<code>DESC students;</code></p>
-</li>
-<li><p>查看创建表的SQL语句：<code>SHOW CREATE TABLE students;</code></p>
-</li>
-<li><p>创建表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> CREATE TABLE students (</span><br><span class="line">  id bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  class_id bigint NOT NULL,</span><br><span class="line">  name varchar(100) NOT NULL,</span><br><span class="line">  gender varchar(1) NOT NULL,</span><br><span class="line">  score int NOT NULL,</span><br><span class="line">  PRIMARY KEY (&#96;id&#96;)</span><br><span class="line">) ENGINE&#x3D;InnoDB AUTO_INCREMENT&#x3D;16 DEFAULT CHARSET&#x3D;utf8</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除表：<code>DROP TABLE students;</code></p>
-</li>
-<li><p>修改表：</p>
-<ul>
-<li><p>增加列：<code>ALTER TABLE students ADD COLUMN birth VARCHAR(10) NOT NULL;</code></p>
-</li>
-<li><p>修改列：<code>ALTER TABLE students CHANGE COLUMN birth birthday VARCHAR(20) NOT NULL;</code></p>
-</li>
-<li><p>删除列：<code>ALTER TABLE students DROP COLUMN birtnday;</code></p>
-</li>
-</ul>
-</li>
-<li><p>添加索引：<code>ALTER TABLE students ADD INDEX idx_score (score);</code></p>
-<p>添加唯一性索引：<code>ALTER TABLE students ADD UNIQUE INDEX idx_name (name);</code></p>
-</li>
-<li><p>添加约束：</p>
-<p>唯一性约束：<code>ALTER TABLE students ADD CONSTRAINT uni_name UNIQUE (name);</code></p>
-<p>外键约束：<code>ALTER TABLE students ADD CONSTRAINT fk_class_id
-FOREIGN KEY (class_id) REFERENCES class (id);</code></p>
-<p>删除约束：<code>ALTER TABLE students DROP FOREIGN KEY fk_class_id;</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-实用SQL语句"><a href="#2-实用SQL语句" class="headerlink" title="2.实用SQL语句"></a>2.实用SQL语句</h3><ul>
-<li><p>插入或替换（主键不存在直接插入，存在则删除再插入）:<code>REPLACE INTO students (id,class_id,name,gender,score) VALUES (1,1,&#39;小明&#39;,&#39;F&#39;,99);</code></p>
-</li>
-<li><p>插入或更新（主键不存在直接插入，存在则更新）：<code>INSERT INTO students (id,class_id,name,gender,score) VALUES (1,1,&#39;小明&#39;,&#39;F&#39;,99) ON DUPLIICATE KEY UPDATE name=&#39;小明&#39;,gender=&#39;F&#39;,score=99;</code></p>
-</li>
-<li><p>插入或忽略（主键不存在直接插入，存在则什么都不干）：<code>INSERT IGNORE INTO students (id, class_id, name, gender, score) VALUES (1, 1, &#39;小明&#39;, &#39;F&#39;, 99);</code></p>
-</li>
-<li><p>快照（复制一份当前表的数据到一个新表）:<code>CREATE TABLE students_of_class1 SELECT * FROM students WHERE class_id=1;</code></p>
-</li>
-<li><p>写入查询结果集：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE statistics (</span><br><span class="line">	id BIGINT NOT NULL AUTO_INCREMENT,</span><br><span class="line">  class_id BIGINT NOT NULL,</span><br><span class="line">  average DOUBLE NOT NULL,</span><br><span class="line">  PRIMARY KEY (id)</span><br><span class="line">);</span><br><span class="line">INSERT INTO statistics (class_id, average) SELECT class_id, AVG(score) FROM students GROUP BY class_id;</span><br><span class="line">SELECT * FROM statistics;</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------------+</span><br><span class="line">| id | class_id | average      |</span><br><span class="line">+----+----------+--------------+</span><br><span class="line">|  1 |        1 |         86.5 |</span><br><span class="line">|  2 |        2 | 73.666666666 |</span><br><span class="line">|  3 |        3 | 88.333333333 |</span><br><span class="line">+----+----------+--------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>强制使用指定索引</p>
-</li>
-</ul>
-<blockquote>
-<p>在查询的时候，数据库系统会自动分析查询语句，并选择一个最合适的索引。但是很多时候，数据库系统的查询优化器并不一定总是能使用最优索引。如果我们知道如何选择索引，可以使用<code>FORCE INDEX</code>强制查询使用指定的索引。例如：<code>SELECT * FROM students FORCE INDEX (idx_class_id) WHERE class_id = 1 ORDER BY id DESC;</code></p>
-<p>指定索引的前提是索引<code>idx_class_id</code>必须存在。</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据库学习笔记-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">数据库学习笔记-2</a>
+    <h1 class="article-title" itemprop="name">
+      数据库学习笔记-2
     </h1>
   
 
@@ -418,147 +264,36 @@ FOREIGN KEY (class_id) REFERENCES class (id);</code></p>
       
 
       
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/weixin.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据库学习笔记-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">数据库学习笔记-1</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" class="archive-article-date">
-  	<time datetime="2020-03-03T12:58:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-关系型数据库"><a href="#1-关系型数据库" class="headerlink" title="1. 关系型数据库"></a>1. 关系型数据库</h3><blockquote>
-<p>采用了关系模型来组织数据，由多张能进行相互联接的二维行列表格组成的数据库。</p>
-</blockquote>
-<p>对于一个关系表，除了定义每一列的名称外，还需要定义每一列的数据类型。常见的数据类型有INT(整型，4字节)，<strong>BIGINT(长整型，8字节)</strong>，REAL（浮点型，4字节），DOUBLE（浮点型，8字节），DECIMAL（M，N）（高精度小数，M表示数字位数，N表示小数位数），CHAR（N）（定长字符串），<strong>VARCHAR（N）（变长字符串，存储0～N个字符）</strong>，BOOLEAN（True or False），DATE，TIME，DATETIME。</p>
-<h3 id="2-SQL"><a href="#2-SQL" class="headerlink" title="2. SQL"></a>2. SQL</h3><blockquote>
-<p>SQL是结构化查询语句（Structured Query Language）的缩写，用来访问和操作数据库系统。SQL语句既可以查询数据库中的数据，也可以添加、更新和删除数据库中的数据，还可以对数据库进行管理和维护操作。不同的数据库，都支持SQL，但不同数据库可能会在标准SQL的基础上有不同的扩展。</p>
-</blockquote>
-<p>总的来说，SQL语言定义了这么几种操作数据库的能力：</p>
-<p><strong>DDL：Data Definition Language</strong></p>
-<p>DDL允许用户定义数据，也就是创建表、删除表、修改表结构这些操作。通常，DDL由数据库管理员执行。</p>
-<p><strong>DML：Data Manipulation Language</strong></p>
-<p>DML为用户提供添加、删除、更新数据的能力，这些是应用程序对数据库的日常操作。</p>
-<p><strong>DQL：Data Query Language</strong></p>
-<p>DQL允许用户查询数据，这也是通常最频繁的数据库日常操作。</p>
-<h3 id="3-MySQL"><a href="#3-MySQL" class="headerlink" title="3. MySQL"></a>3. MySQL</h3><blockquote>
-<p>MySQL本身只是一个SQL接口，它的内部还包含了多种数据引擎。数据库存储引擎是数据库底层软件组织，数据库管理系统（DBMS）使用数据引擎进行创建、查询、更新和删除数据。不同的存储引擎提供不同的存储机制、索引技巧、锁定水平等功能，使用不同的存储引擎，还可以获得特定的功能。常用的包括：</p>
-<ul>
-<li>InnoDB：由Innobase Oy公司开发的一款支持事务的数据库引擎，2006年被Oracle收购；</li>
-<li>MyISAM：MySQL早期集成的默认数据库引擎，不支持事务。</li>
-</ul>
-</blockquote>
-<h3 id="4-关系模型"><a href="#4-关系模型" class="headerlink" title="4. 关系模型"></a>4. 关系模型</h3><ul>
-<li><p>表的每一行称为记录（Record），表的每一列称为字段（Column），每一行由多个不同字段组成。</p>
-</li>
-<li><p>字段定义了数据类型，可以决定是否允许为NULL。一般为了加快速度避免允许为NULL。<em>NULL等于不存在，不等于0，不等于“”。</em></p>
-</li>
-<li><p>关系数据库的表与表之间存在三种关系，关系通过主键和外键来维护：</p>
-<ul>
-<li>一对一（如一个班级对应一个教室）</li>
-<li>一对多（如一个班级对应多个学生）</li>
-<li>多对一（如多个学生对应一个班级）</li>
-</ul>
-</li>
-<li><p>主键：关系表要求任意两条记录不能重复，且能够通过某个字段唯一区分出不同的记录，该字段称为主键，一般将其命名为id。主键要求记录一旦插入到表中，主键最好不要再修改，因此选取主键一个根本原则是：<strong>不使用任何业务相关的字段</strong>。主键也不应该允许为NULL。常见的可作为id字段的类型有：</p>
-<ul>
-<li><p>自增整数类型 <code>BIGINT NOT NULL AUTO_INCREMENT</code></p>
-</li>
-<li><p>全局唯一GUID类型</p>
-</li>
-</ul>
-<p><em>联合主键：多个字段唯一标识记录，不常用</em>。</p>
-</li>
-<li><p>外键：在<code>students</code>表中，通过<code>class_id</code>的字段，可以把数据与另一张表关联起来，这种列称为外键。</p>
-<p>一对多关系，如一个班级有多个学生，这种关系通过在学生表中加入一列<code>class_id</code>实现。</p>
-<p>多对多关系通过两个一对多关系实现，即通过一个中间表实现。</p>
-<p>一对一关系，有时候并不可以合二为一，存在不存在的情况。</p>
-<p>外键通过定义外键约束实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">ADD CONSTRAINT fk_class_id</span><br><span class="line">FOREIGN KEY (class_id)</span><br><span class="line">REFERENCES class (id);</span><br></pre></td></tr></table></figure>
-
-<p>外键约束会降低数据库的性能，因此大部分互联网应用程序为了追求速度而不设置外键约束，仅靠应用程序保证逻辑正确。此时<code>class_id</code>只是一个普通的列，但起外键的作用。</p>
-<p>删除外键约束：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">DROP FOREIGN KEY fk_class_id;</span><br></pre></td></tr></table></figure>
-
-<p>删除列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP COLUMN ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>索引：关系数据库中对某一列或多个列的值进行预排序的数据结构。例如如果经常需要根据<code>students</code>表里的<code>score</code>列进行查询，就可以对<code>score</code>列创建索引，创建一个名为<code>idx_score</code>,使用<code>score</code>列的索引：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">ADD INDEX idx_score (score);</span><br></pre></td></tr></table></figure>
-
-<p>索引也可以有多列，如<code>ADD INDEX idx_name_score (name, score);</code>。</p>
-<p>索引效率与散列度成正比。索引提高查询效率，但降低了插入、更新、删除记录的效率。</p>
-<p>保证某一列具有唯一性约束且可以当作索引时，可以创建唯一索引：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">ADD UNIQUE INDEX uni_name (name);</span><br></pre></td></tr></table></figure>
-
-<p>也可以仅添加唯一约束而不创建唯一索引：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD CONSTRAINT uni_name UNIQUE (name);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-
-      
-
       
     </div>
     <div class="article-info article-info-index">
@@ -578,16 +313,84 @@ FOREIGN KEY (class_id) REFERENCES class (id);</code></p>
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          数据库学习笔记-3
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据库学习笔记-1</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -607,485 +410,14 @@ FOREIGN KEY (class_id) REFERENCES class (id);</code></p>
 
 
 
-
   
-    <article id="post-数据结构笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0/">数据结构笔记</a>
-    </h1>
   
 
-        
-        <a href="/2020/03/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2020-03-03T03:58:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近写leetcode一道关于LRU缓存的题目时发现上学期刚学过的数据结构一个寒假没怎么用就又双叒叕忘记了，每次看数据结构和算法都在怀疑自己的脑容量。正值疫情被困在家中，突然就感受到纸质笔记的弊端，正好趁着复习回顾的时候在博客上重新记录相关知识点。</p>
-<blockquote>
-<p>数据结构可以从逻辑上分为线性结构和非线性结构。线性结构有数组、栈、链表等，非线性结构有图、树等。注意线性和非线性与存储结构无关，只是逻辑上的划分，比如我们可以用数组去存储二叉树。</p>
-</blockquote>
-<h2 id="常见线性结构"><a href="#常见线性结构" class="headerlink" title="常见线性结构"></a>常见线性结构</h2><h3 id="1-数组-Array"><a href="#1-数组-Array" class="headerlink" title="1. 数组 Array"></a>1. 数组 Array</h3><p>数组是最简单的数据结构，存放<strong>同一种数据类型</strong>的集合。从增删改查四个方面来说，增删性能比较低，改查性能较高。</p>
-<h3 id="2-链表-LinkedList"><a href="#2-链表-LinkedList" class="headerlink" title="2. 链表 LinkedList"></a>2. 链表 LinkedList</h3><p>链表分为单向链表和双向链表。不存在下标的概念，增删性能较高，改查性能较低。</p>
-<h3 id="3-栈-Stack"><a href="#3-栈-Stack" class="headerlink" title="3. 栈 Stack"></a>3. 栈 Stack</h3><p>栈是一种运算受限的线性表，遵守先进后出的规则。仅允许在列表的一端添加和删除元素（栈顶），相对的把另一端称为栈底。</p>
-<p><strong>栈是基于数组实现的</strong>。</p>
-<h3 id="4-队列-Queue"><a href="#4-队列-Queue" class="headerlink" title="4. 队列 Queue"></a>4. 队列 Queue</h3><p>队列是一种运算受限的线性表，只允许表的前端进行删除操作（队头），表的后端进行添加操作（队尾）。</p>
-<p>单向队列遵循先进先出的规则，双向队头和队尾均可进行插入和删除操作。</p>
-<h3 id="5-哈希表-Hash"><a href="#5-哈希表-Hash" class="headerlink" title="5. 哈希表 Hash"></a>5. 哈希表 Hash</h3><p>元素的值和数组的下标有一个确定的对应关系，而不记录元素的添加顺序。最大用处是提高了数据的查找速率。</p>
-<h2 id="JAVA中的集合框架"><a href="#JAVA中的集合框架" class="headerlink" title="JAVA中的集合框架"></a>JAVA中的集合框架</h2><p><strong>Java中集合的接口和实现分离，一种集合可能有多种实现方式，但在程序中使用时并不需要究竟是哪种实现，只有在构建集合对象时才需要使用具体的类。</strong></p>
-<p>Java集合框架为不同类型的集合定义了大量的接口，其中两个基本接口为Collection和Map：</p>
-<pre><code> Iterable
-    |
-Collection                   Map              Iterator
-|     \   \                   |                   |
-List  Set Queue-Deque      SortedMap         ListIterator
-       |                      |
-      SortedSet           NavigableMap
-       |
-      NavigableSet</code></pre><h3 id="1-List"><a href="#1-List" class="headerlink" title="1. List"></a>1. List</h3><p>List是一种有序集合，可以使用迭代器或者整数索引（随机访问，random access）访问。</p>
-<blockquote>
-<p>集合的集合的有序、无序是指插入元素时，保持插入的顺序性，也就是先插入的元素优先放入集合的前面部分。 而排序是指插入元素后，集合中的元素是否自动排序（例如升序排序）。HashMap、HashSet、HashTable 等基于哈希存储方式的集合是无序的，TreeMap、TreeSet等集合是排序的，一般来说其它的集合都是有序的。</p>
-</blockquote>
-<h4 id="1-数组列表-ArrayList"><a href="#1-数组列表-ArrayList" class="headerlink" title="1. 数组列表 ArrayList"></a>1. 数组列表 ArrayList</h4><h4 id="2-链表-LinkedList-1"><a href="#2-链表-LinkedList-1" class="headerlink" title="2. 链表 LinkedList"></a>2. 链表 LinkedList</h4><p>Java中的链表均是双向链表，以减少在列表中间插入或删除元素所付出的代价。使用整数索引时不使用链表。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-简单工厂模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">简单工厂模式</a>
-    </h1>
   
 
-        
-        <a href="/2020/03/01/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2020-03-01T09:23:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><p>考虑一个简单的软件应用场景，一个软件系统可以提供多个外观不同的按钮，这些按钮均源自同一个基类，不过在继承基类后不同的子类修改了部分属性使其外观不同。如果我们希望使用这些按钮时，无需知道具体按钮的名字，只需要知道表示该按钮类的一个参数，并提供一个调用方便的方法，把该参数传入方法即可返回一个相应的按钮对象，此时就可使用简单工厂模式。</p>
-<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><p>简单工厂模式（Simple Factory Pattern），又称为静态工厂方法（Static Factory Method）,属于类创建型模式。在简单工厂模式中，<strong>可以根据参数的不同返回不同类的实例</strong>。简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类。</p>
-<h2 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h2><ul>
-<li>将对象的创建与对象本身业务处理分离，降低耦合</li>
-<li>当你需要什么，只需要传入一个正确的参数，就可以获得所需对象，而无需知道具体创建细节<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> MotoVehicle <span class="title">motoLeaseOut</span><span class="params">(String brand,String type,<span class="keyword">int</span> seat,<span class="keyword">int</span> tons)</span> </span>&#123;</span><br><span class="line">		MotoVehicle moto=<span class="keyword">null</span>;</span><br><span class="line">		<span class="comment">//增强型for循环</span></span><br><span class="line">		<span class="keyword">for</span>(MotoVehicle mymoto:motos) &#123;</span><br><span class="line">			<span class="keyword">if</span>(mymoto <span class="keyword">instanceof</span> Car) &#123;<span class="comment">//判断当前对象属于哪一个类</span></span><br><span class="line">				Car car=(Car)mymoto;</span><br><span class="line">				<span class="keyword">if</span>(car.getBrand().equals(brand)&amp;&amp;car.getType().equals(type)) &#123;</span><br><span class="line">					moto=car;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(mymoto <span class="keyword">instanceof</span> Bus) &#123;</span><br><span class="line">				Bus bus=(Bus)mymoto;</span><br><span class="line">				<span class="keyword">if</span>(bus.getBrand().equals(brand)&amp;&amp;bus.getSeatCount()==seat)&#123;</span><br><span class="line">					moto=bus;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(mymoto <span class="keyword">instanceof</span> Truck) &#123;</span><br><span class="line">				Truck truck=(Truck)mymoto;</span><br><span class="line">				<span class="keyword">if</span>(truck.getBrand().equals(brand)&amp;&amp;truck.getTons()==tons) &#123;</span><br><span class="line">					moto=truck;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> moto;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/01/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java类继承" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/28/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/">Java类继承</a>
-    </h1>
   
 
-        
-        <a href="/2020/02/28/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/" class="archive-article-date">
-  	<time datetime="2020-02-28T02:36:21.756Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong><em>继承一般发生在同一包之间</em></strong></p>
-<ul>
-<li>访问修饰符总结：<ul>
-<li>private：本类</li>
-<li>默认（firendly）：本类、同包</li>
-<li>protected：本类、同包、子类</li>
-<li>public：本类、同包、子类、其他</li>
-</ul>
-</li>
-</ul>
-<h2 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h2><ol>
-<li><p>子类通过super调用父类构造函数，在子类构造函数的第一行使用；</p>
-<p><strong>super的两个用途：</strong></p>
-<ol>
-<li><p>调用父类构造器</p>
-</li>
-<li><p>调用超类方法（子类的方法不能够直接访问超类的私有域，因此访问私有域时需要调用父类的公有方法作为接口）</p>
-<p><em>不能访问父类private成员</em></p>
-</li>
-</ol>
-</li>
-<li><p>子类构造函数中没有显式地调用父类构造器时，会自动的调用父类的无参构造函数；当父类不存在无参构造函数时即报错；</p>
-</li>
-</ol>
-<h2 id="覆盖方法（Override）"><a href="#覆盖方法（Override）" class="headerlink" title="覆盖方法（Override）"></a>覆盖方法（Override）</h2><p>覆盖一定在继承中发生，方法值、参数表完全相同，返回值相同或是其子类，访问权限不能严于父类；注意与重载(Overload)区分。</p>
-<ul>
-<li>instanceof：用于判断类，常和强制类型转换（父类转换为子类）结合使用。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Pet pet=<span class="keyword">new</span> Dog(); <span class="comment">//自动类型转换，由上到下</span></span><br><span class="line"></span><br><span class="line">Dog dog=(Dog) pet;</span><br><span class="line"></span><br><span class="line">Penguin png=(Penguin) pet;<span class="comment">//报错，必须转换为真实类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(pet instanced Penguin)&#123;</span><br><span class="line"></span><br><span class="line">	Penguin png=(Penguin) pet;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>final修饰符：<ul>
-<li>修饰的类不能再被继承</li>
-<li>修饰的方法不能被覆盖</li>
-<li>修饰的变量将变成常量，只能在初始化时进行赋值</li>
-</ul>
-</li>
-</ul>
-<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><ol>
-<li><p>“is-a”规则(置换规则)：使用超类对象的任何地方都可以用子类对象置换</p>
-</li>
-<li><p>多态的实现思路：</p>
-<ol>
-<li>子类继承父类</li>
-<li>子类重写方法</li>
-<li>超类引用指向子类对象</li>
-</ol>
-<p><strong><em>超类引用不可以调用子类特有方法</em></strong></p>
-</li>
-<li><p>多态的实现形式：</p>
-<ol>
-<li>使用父类作为方法形参</li>
-<li>使用父类作为方法返回值</li>
-</ol>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/28/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hexo学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/28/hexo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">hexo学习笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/28/hexo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2020-02-28T01:40:43.924Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><ol>
-<li>初始化博客 sudo hexo init</li>
-<li>hexo s //start</li>
-<li>创建新的文章 hexo new “文章名”</li>
-<li>修改文章可使用vim</li>
-<li>hexo clean</li>
-<li>hexo g //generate</li>
-</ol>
-<h2 id="远程部署到github"><a href="#远程部署到github" class="headerlink" title="远程部署到github"></a>远程部署到github</h2><ol>
-<li><p>cnpm install –save hexo-deployer-git</p>
-</li>
-<li><p>修改 _config.yml 文件的deploy部分：</p>
-<p>type: git</p>
-<p>repo: 远程仓库地址（注意远程仓库名应该与用户名相同）</p>
-<p>branch: master</p>
-</li>
-<li><p>hexo clean</p>
-</li>
-<li><p>hexo g</p>
-</li>
-<li><p>hexo d //deploy</p>
-</li>
-</ol>
-<h2 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h2><ol>
-<li><p>将主题下至themes文件夹内</p>
-</li>
-<li><p>修改 _config.yml 文件的theme部分</p>
-</li>
-<li><p>hexo clean</p>
-</li>
-<li><p>hexo g</p>
-</li>
-<li><p>hexo d</p>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/28/hexo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/26/hello-world/">Hello World</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/26/hello-world/" class="archive-article-date">
-  	<time datetime="2020-02-26T01:17:04.116Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/26/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
 
 
@@ -1108,8 +440,8 @@ List  Set Queue-Deque      SortedMap         ListIterator
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
