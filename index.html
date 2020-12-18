@@ -146,869 +146,543 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-数据库学习笔记-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-操作系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-4/">数据库学习笔记-4</a>
+      <a class="article-title" href="/2020/08/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
     </h1>
   
 
         
-        <a href="/2020/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-4/" class="archive-article-date">
-  	<time datetime="2020-03-06T03:54:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-06</time>
+        <a href="/2020/08/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="archive-article-date">
+  	<time datetime="2020-08-10T15:33:35.008Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>把多条语句作为一个整体进行操作的功能，被称为数据库<em>事务</em>。数据库事务可以确保该事务范围内的所有操作都可以全部成功或者全部失败。如果事务失败，那么效果就和没有执行这些SQL一样，不会对数据库数据有任何改动。</p>
-</blockquote>
-<p>数据库事务的4个特性：</p>
+        <h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><p>多道程序设计：在计算机内存中同时存在放多个程序，在计算机的管理程序之下相互穿插运行</p>
+<p>操作系统的重要功能：对多道程序的管理</p>
+<p>主要分为：进程管理、存储管理、作业管理、文件管理、设备管理</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810233337176.png" alt="image-20200810233337176"></p>
+<h3 id="1-操作系统概览"><a href="#1-操作系统概览" class="headerlink" title="1. 操作系统概览"></a>1. 操作系统概览</h3><ol>
+<li><p>操作系统是管理计算机硬件和软件资源的计算机程序</p>
+<p>可以管理配置内存、决定资源供需顺序、控制输入输出设备等，提供让用户和系统交互的操作界面</p>
+<p>即管理硬件、提供用户交互的软件系统</p>
+</li>
+<li><p>操作系统的基本功能</p>
 <ul>
-<li>A：Atomic，原子性，将所有SQL作为原子工作单元执行，要么全部执行，要么全部不执行；</li>
-<li>C：Consistent，一致性，事务完成后，所有数据的状态都是一致的，即A账户只要减去了100，B账户则必定加上了100；</li>
-<li>I：Isolation，隔离性，如果有多个事务并发执行，每个事务作出的修改必须与其他事务隔离；</li>
-<li>D：Duration，持久性，即事务完成后，对数据库数据的修改被持久化存储。</li>
+<li>统一管理计算机资源：处理器资源、存储器资源、IO设备资源、文件资源</li>
+<li>对计算机资源的抽象</li>
+<li>提供了用户与计算机之间的接口：系统调用、命令、图形窗口</li>
 </ul>
-<p>事务分为隐形事务（单条语句）和显式事务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BEGIN;</span><br><span class="line">UPDATE accounts SET balance &#x3D; balance - 100 WHERE id &#x3D; 1;</span><br><span class="line">UPDATE accounts SET balance &#x3D; balance + 100 WHERE id &#x3D; 2;</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
-
-<p><code>COMMIT</code>指提交事务，即事务内的所有SQL所做的修改永久保存。需要主动让事务失败时使用<code>ROLLBACK</code>回滚事务。</p>
-<hr>
-<h2 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h2><blockquote>
-<p>对于两个并发执行的事务，如果涉及到操作同一条记录的时候，可能会发生问题。因为并发操作会带来数据的不一致性，包括脏读、不可重复读、幻读等。数据库系统提供了隔离级别来让我们有针对性地选择事务的隔离级别，避免数据不一致的问题。</p>
-<p>SQL标准定义了4种隔离级别，分别对应可能出现的数据不一致的情况：</p>
-<table>
-<thead>
-<tr>
-<th align="left">Isolation Level</th>
-<th align="left">脏读（Dirty Read）</th>
-<th align="left">不可重复读（Non Repeatable Read）</th>
-<th align="left">幻读（Phantom Read）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Read Uncommitted</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-</tr>
-<tr>
-<td align="left">Read Committed</td>
-<td align="left">-</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-</tr>
-<tr>
-<td align="left">Repeatable Read</td>
-<td align="left">-</td>
-<td align="left">-</td>
-<td align="left">Yes</td>
-</tr>
-<tr>
-<td align="left">Serializable</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-</blockquote>
-<h3 id="1-Read-Uncommitted"><a href="#1-Read-Uncommitted" class="headerlink" title="1. Read Uncommitted"></a>1. Read Uncommitted</h3><blockquote>
-<p>Read Uncommitted是隔离级别最低的一种事务级别。在这种隔离级别下，一个事务会读到另一个事务更新后但未提交的数据，如果另一个事务回滚，那么当前事务读到的数据就是脏数据，这就是脏读（Dirty Read）。</p>
-</blockquote>
-<p><code>SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</code></p>
-<h3 id="2-Read-Committed"><a href="#2-Read-Committed" class="headerlink" title="2. Read Committed"></a>2. Read Committed</h3><p>在Read Committed隔离级别下，事务不可重复读一条数据，因为可能会出现另一个事务修改该数据导致两次结果不一样的问题。（不可重复读,Non Repeatable Read）</p>
-<p><code>SET TRANSACTION ISOLATION LEVEL READ COMMITTED;</code> </p>
-<h3 id="3-Repeatable-Read"><a href="#3-Repeatable-Read" class="headerlink" title="3. Repeatable Read"></a>3. Repeatable Read</h3><p>在Repeatable Read隔离级别下，事务可能遇到数据不可读，但后续可更新的情况。（幻读，Phantom Read）</p>
-<p><code>SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;</code></p>
-<h3 id="4-Serializable"><a href="#4-Serializable" class="headerlink" title="4. Serializable"></a>4. Serializable</h3><p>最严格的隔离级别，脏读、不可重复读、幻读都不会发生。</p>
-<blockquote>
-<p>虽然Serializable隔离级别下的事务具有最高的安全性，但是，由于事务是串行执行，所以效率会大大下降，应用程序的性能会急剧降低。如果没有特别重要的情景，一般都不会使用Serializable隔离级别。</p>
-</blockquote>
-<p><strong>没有指定隔离级别时，MySQL的默认隔离级别是Repeatable Read。</strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据库学习笔记-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/">数据库学习笔记-3</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/" class="archive-article-date">
-  	<time datetime="2020-03-05T06:33:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在命令行输入<code>mysql -u root -p</code>，根据提示输入密码（root口令），连接上MySQL Server，提示符变为<code>mysql&gt;</code>；输入<code>exit</code>断开连接(服务器仍运行)。  </p>
-<p><em>命令行程序mysql实际上是MySQL Client，在客户端输入的SQL语句通过TCP连接发送到MySQL Server，默认端口号是3306。MySQL Server的可执行程序是mysqld，在后台运行。</em></p>
-<p>也可以只安装MySQL Client，连接到远程的MySQL Server，用<code>-h</code>指定IP或域名：<code>mysql -h 10.0.1.99 -u root -p</code></p>
-<h3 id="1-管理MySQL"><a href="#1-管理MySQL" class="headerlink" title="1. 管理MySQL"></a>1. 管理MySQL</h3><p>可视化图形界面:<a href="https://dev.mysql.com/downloads/workbench/" target="_blank" rel="noopener">MySQL Workbench</a>。</p>
-<blockquote>
-<p>MySQL Workbench可以用可视化的方式查询、创建和修改数据库表，但是，归根到底，MySQL Workbench是一个图形客户端，它对MySQL的操作仍然是发送SQL语句并执行。因此，本质上，MySQL Workbench和MySQL Client命令行都是客户端，和MySQL交互，唯一的接口就是SQL。</p>
-<p>因此，MySQL提供了大量的SQL语句用于管理。虽然可以使用MySQL Workbench图形界面来直接管理MySQL，但是，很多时候，通过SSH远程连接时，只能使用SQL命令，所以，了解并掌握常用的SQL管理操作是必须的。</p>
-</blockquote>
+</li>
+<li><p>相关概念</p>
 <ul>
-<li><p>数据库</p>
+<li><p>并发性</p>
+<p>并行：两个或者多个事件可以在同一个时刻发生</p>
+<p>并发：两个或者多个事件可以在同一个时间间隔发送</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812153913529.png" alt="image-20200812153913529"></p>
+</li>
+<li><p>共享性：操作系统中的资源可以提供给多个并发的程序使用</p>
 <ul>
-<li><p>显示所有数据库：<code>SHOW DATABASES;</code></p>
-<p>其中，<code>information_schema</code>、<code>mysql</code>、<code>performance_schema</code>和<code>sys</code>是系统库</p>
-</li>
-<li><p>创建数据库：<code>CREATE DATABASE test;</code></p>
-</li>
-<li><p>删除数据库：<code>DROP DATABSE test;</code></p>
-<p>该数据库所有的表都会被删除。</p>
-</li>
-<li><p>切换数据库：<code>USE test;</code></p>
-</li>
+<li>互斥共享：不能同时使用</li>
+<li>同时访问：某种资源在一段时间内可以并发的被多个程序访问（宏观上的同时）</li>
 </ul>
 </li>
-<li><p>表</p>
+<li><p>虚拟性：把一个物理实体转变为若干个逻辑实体</p>
+<p>物理实体是真实存在的，逻辑实体是虚拟的</p>
+<p>虚拟的技术主要有时分复用技术和空分复用技术</p>
 <ul>
-<li><p>显示当前数据库所有的表：<code>SHOW TABLES;</code></p>
-</li>
-<li><p>查看一个表的结构：<code>DESC students;</code></p>
-</li>
-<li><p>查看创建表的SQL语句：<code>SHOW CREATE TABLE students;</code></p>
-</li>
-<li><p>创建表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> CREATE TABLE students (</span><br><span class="line">  id bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  class_id bigint NOT NULL,</span><br><span class="line">  name varchar(100) NOT NULL,</span><br><span class="line">  gender varchar(1) NOT NULL,</span><br><span class="line">  score int NOT NULL,</span><br><span class="line">  PRIMARY KEY (&#96;id&#96;)</span><br><span class="line">) ENGINE&#x3D;InnoDB AUTO_INCREMENT&#x3D;16 DEFAULT CHARSET&#x3D;utf8</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除表：<code>DROP TABLE students;</code></p>
-</li>
-<li><p>修改表：</p>
-<ul>
-<li><p>增加列：<code>ALTER TABLE students ADD COLUMN birth VARCHAR(10) NOT NULL;</code></p>
-</li>
-<li><p>修改列：<code>ALTER TABLE students CHANGE COLUMN birth birthday VARCHAR(20) NOT NULL;</code></p>
-</li>
-<li><p>删除列：<code>ALTER TABLE students DROP COLUMN birtnday;</code></p>
-</li>
+<li>时分复用：资源在时间上进行复用，不同程序并发使用<ul>
+<li>虚拟处理器技术：借助多道程序设计技术，为每个程序建立进程，多个程序分时复用处理器</li>
+<li>虚拟设备技术：物理设备虚拟为多个逻辑设备，每个程序占用一个逻辑设备，多个设备通过逻辑设备进行访问</li>
 </ul>
 </li>
-<li><p>添加索引：<code>ALTER TABLE students ADD INDEX idx_score (score);</code></p>
-<p>添加唯一性索引：<code>ALTER TABLE students ADD UNIQUE INDEX idx_name (name);</code></p>
-</li>
-<li><p>添加约束：</p>
-<p>唯一性约束：<code>ALTER TABLE students ADD CONSTRAINT uni_name UNIQUE (name);</code></p>
-<p>外键约束：<code>ALTER TABLE students ADD CONSTRAINT fk_class_id
-FOREIGN KEY (class_id) REFERENCES class (id);</code></p>
-<p>删除约束：<code>ALTER TABLE students DROP FOREIGN KEY fk_class_id;</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-实用SQL语句"><a href="#2-实用SQL语句" class="headerlink" title="2.实用SQL语句"></a>2.实用SQL语句</h3><ul>
-<li><p>插入或替换（主键不存在直接插入，存在则删除再插入）:<code>REPLACE INTO students (id,class_id,name,gender,score) VALUES (1,1,&#39;小明&#39;,&#39;F&#39;,99);</code></p>
-</li>
-<li><p>插入或更新（主键不存在直接插入，存在则更新）：<code>INSERT INTO students (id,class_id,name,gender,score) VALUES (1,1,&#39;小明&#39;,&#39;F&#39;,99) ON DUPLIICATE KEY UPDATE name=&#39;小明&#39;,gender=&#39;F&#39;,score=99;</code></p>
-</li>
-<li><p>插入或忽略（主键不存在直接插入，存在则什么都不干）：<code>INSERT IGNORE INTO students (id, class_id, name, gender, score) VALUES (1, 1, &#39;小明&#39;, &#39;F&#39;, 99);</code></p>
-</li>
-<li><p>快照（复制一份当前表的数据到一个新表）:<code>CREATE TABLE students_of_class1 SELECT * FROM students WHERE class_id=1;</code></p>
-</li>
-<li><p>写入查询结果集：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE statistics (</span><br><span class="line">	id BIGINT NOT NULL AUTO_INCREMENT,</span><br><span class="line">  class_id BIGINT NOT NULL,</span><br><span class="line">  average DOUBLE NOT NULL,</span><br><span class="line">  PRIMARY KEY (id)</span><br><span class="line">);</span><br><span class="line">INSERT INTO statistics (class_id, average) SELECT class_id, AVG(score) FROM students GROUP BY class_id;</span><br><span class="line">SELECT * FROM statistics;</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+--------------+</span><br><span class="line">| id | class_id | average      |</span><br><span class="line">+----+----------+--------------+</span><br><span class="line">|  1 |        1 |         86.5 |</span><br><span class="line">|  2 |        2 | 73.666666666 |</span><br><span class="line">|  3 |        3 | 88.333333333 |</span><br><span class="line">+----+----------+--------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>强制使用指定索引</p>
-</li>
-</ul>
-<blockquote>
-<p>在查询的时候，数据库系统会自动分析查询语句，并选择一个最合适的索引。但是很多时候，数据库系统的查询优化器并不一定总是能使用最优索引。如果我们知道如何选择索引，可以使用<code>FORCE INDEX</code>强制查询使用指定的索引。例如：<code>SELECT * FROM students FORCE INDEX (idx_class_id) WHERE class_id = 1 ORDER BY id DESC;</code></p>
-<p>指定索引的前提是索引<code>idx_class_id</code>必须存在。</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据库学习笔记-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">数据库学习笔记-2</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/" class="archive-article-date">
-  	<time datetime="2020-03-04T06:35:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关系数据库的基本操作就是增删改查，即CRUD：Create、Retrieve、Update、Delete。增、删、查、改，对应的SQL语句分别是：</p>
-<ul>
-<li>SELECT：查询已有记录</li>
-</ul>
-<ul>
-<li>INSERT：插入新记录；</li>
-<li>UPDATE：更新已有记录；</li>
-<li>DELETE：删除已有记录。</li>
-</ul>
-<h3 id="1-查询"><a href="#1-查询" class="headerlink" title="1. 查询"></a>1. 查询</h3><ul>
-<li><p>基本查询：<code>SELECT * FROM &lt;表名&gt;</code></p>
-</li>
-<li><p>条件查询：<code>SELECT * FROM &lt;表名&gt; WHERE &lt;条件表达式&gt;</code></p>
-<ul>
-<li>优先级 ()&gt;NOT&gt;AND&gt;OR</li>
-<li>&lt;&gt;判断不相等</li>
-<li>LIKE判断相似，如name LIKE ‘ab%’，%表示任意字符，返回所有name为ab、abc…的行</li>
-<li>score BETWEEN 60 AND 90 等于 score &gt;=60 AND score&lt;=90</li>
-</ul>
-</li>
-<li><p>投影查询：<code>SELECT 列1 别名1, 列2 别名2, 列3 别名3 FROM ...</code>，别名可省略</p>
-</li>
-<li><p>排序：<code>SELECT * FROM &lt;表名&gt; WHERE &lt;条件表达式&gt; ORDER BY 列名 DESC</code>，默认ASC升序，DESC降序</p>
-</li>
-<li><p>分页查询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM &lt;表名&gt; </span><br><span class="line">WHERE &lt;条件表达式&gt; </span><br><span class="line">ORDER BY 列名 DESC </span><br><span class="line">LIMIT M OFFSET N;</span><br></pre></td></tr></table></figure>
-
-<p>从N号记录开始取M条，注意N从0开始，也可写成<code>LIMIT N,M</code>。分页时LIMIT=pageSize，OFFSET=pageSize * (pageIndex - 1)。OFFSET可选，默认0，超过查询最大数量时不报错而是返回空结果集。</p>
-</li>
-<li><p>聚合查询：<code>SELECT COUNT(*) num FROM &lt;表名&gt; WHERE &lt;条件表达式&gt;</code>,返回结果表头为<code>COUNT(num)</code>，无符合要求时返回0。</p>
-<p>其他常用聚合函数，无符合要求时返回NULL：</p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SUM</td>
-<td>计算某列合计值，必须数值类型</td>
-</tr>
-<tr>
-<td>AVG</td>
-<td>计算某列平均值，必须数值类型</td>
-</tr>
-<tr>
-<td>MAX</td>
-<td>计算某列最大值，字符类型时返回排序最后的字符</td>
-</tr>
-<tr>
-<td>MIN</td>
-<td>计算某列最小值，字符类型时返回排序最前的字符</td>
-</tr>
-</tbody></table>
-<p>分组：<code>SELECT COUNT(*) num FROM students WHERE &lt;条件表达式&gt; GROUP BY 列名，列名，...;</code></p>
-</li>
-<li><p>多表查询：</p>
-<p>注意多表查询时要通过<code>表名.列名</code>的方式引用列，可以通过给表设置别名降低复杂度。</p>
-<ul>
-<li><p>笛卡尔积查询：<code>SELECT * FROM 表1 别名1，表2;</code></p>
-<p>返回表一表二乘积：表一与表二的列和行积。</p>
-</li>
-<li><p>连接查询：</p>
-<ul>
-<li><p>INNER JOIN查询，返回s.class_id与c.id的交集对应行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT s.id, s.name, s.class_id, c.name class_name, s.gender, s.score</span><br><span class="line">FROM students s</span><br><span class="line">INNER JOIN classes c</span><br><span class="line">ON s.class_id &#x3D; c.id</span><br><span class="line">WHERE &lt;条件表达式&gt;</span><br><span class="line">ORDER BY ;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
+<li>空分复用技术：虚拟磁盘和虚拟内存的实现<ul>
+<li>虚拟磁盘技术：物理磁盘虚拟为逻辑磁盘，如CDE等逻辑盘</li>
+<li>虚拟内存技术：在逻辑上扩大了程序的存储容量，使用比实际内存更大的容量，提升变成的效率</li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-<pre><code>+ OUTER JOIN查询：
-
-  + RIGHT ORDER JOIN：返回c.id对应行，如果对应s.class_id不存在，则其他列值都为NULL；
-
-  + LEFT ORDER JOIN：返回s.class_id对应行
-
-  + FULL ORDER JOIN：返回并集
-
-    **MySQL没有，可以通过对RIGHT、LEFT的分别运算UNION实现**。</code></pre><h3 id="2-插入"><a href="#2-插入" class="headerlink" title="2. 插入"></a>2. 插入</h3><p>INSERT语句的基本语法是：<code>INSERT INTO &lt;表名&gt; （字段1，字段2，...) VALUES (值1，值2，...),(值11，值22，...);</code></p>
-<p><em>自增主键字段和有默认值字段可以不出现</em>。</p>
-<h3 id="3-更新"><a href="#3-更新" class="headerlink" title="3. 更新"></a>3. 更新</h3><p>UPDATE语句的基本语法是：<code>UPDATE &lt;表名&gt; SET 字段1=值1, 字段2=值2, ... WHERE ...;</code></p>
-<p>字段可以使用表达式，如<code>score=score+10</code>；</p>
-<p>没有<code>where</code>时默认整个表所有的记录都会被更新，所以实际使用UPDATE时应先通过SELECT观察WHERE是否选出了期望的记录集。</p>
-<h3 id="4-删除"><a href="#4-删除" class="headerlink" title="4. 删除"></a>4. 删除</h3><p>DELETE语句的基本语法是：<code>DELETE FROM &lt;表名&gt; WHERE ...;</code></p>
-<p>与UPDATE类似，不带WHERE条件时整个表都会被删除。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据库学习笔记-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">数据库学习笔记-1</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" class="archive-article-date">
-  	<time datetime="2020-03-03T12:58:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-关系型数据库"><a href="#1-关系型数据库" class="headerlink" title="1. 关系型数据库"></a>1. 关系型数据库</h3><blockquote>
-<p>采用了关系模型来组织数据，由多张能进行相互联接的二维行列表格组成的数据库。</p>
-</blockquote>
-<p>对于一个关系表，除了定义每一列的名称外，还需要定义每一列的数据类型。常见的数据类型有INT(整型，4字节)，<strong>BIGINT(长整型，8字节)</strong>，REAL（浮点型，4字节），DOUBLE（浮点型，8字节），DECIMAL（M，N）（高精度小数，M表示数字位数，N表示小数位数），CHAR（N）（定长字符串），<strong>VARCHAR（N）（变长字符串，存储0～N个字符）</strong>，BOOLEAN（True or False），DATE，TIME，DATETIME。</p>
-<h3 id="2-SQL"><a href="#2-SQL" class="headerlink" title="2. SQL"></a>2. SQL</h3><blockquote>
-<p>SQL是结构化查询语句（Structured Query Language）的缩写，用来访问和操作数据库系统。SQL语句既可以查询数据库中的数据，也可以添加、更新和删除数据库中的数据，还可以对数据库进行管理和维护操作。不同的数据库，都支持SQL，但不同数据库可能会在标准SQL的基础上有不同的扩展。</p>
-</blockquote>
-<p>总的来说，SQL语言定义了这么几种操作数据库的能力：</p>
-<p><strong>DDL：Data Definition Language</strong></p>
-<p>DDL允许用户定义数据，也就是创建表、删除表、修改表结构这些操作。通常，DDL由数据库管理员执行。</p>
-<p><strong>DML：Data Manipulation Language</strong></p>
-<p>DML为用户提供添加、删除、更新数据的能力，这些是应用程序对数据库的日常操作。</p>
-<p><strong>DQL：Data Query Language</strong></p>
-<p>DQL允许用户查询数据，这也是通常最频繁的数据库日常操作。</p>
-<h3 id="3-MySQL"><a href="#3-MySQL" class="headerlink" title="3. MySQL"></a>3. MySQL</h3><blockquote>
-<p>MySQL本身只是一个SQL接口，它的内部还包含了多种数据引擎。数据库存储引擎是数据库底层软件组织，数据库管理系统（DBMS）使用数据引擎进行创建、查询、更新和删除数据。不同的存储引擎提供不同的存储机制、索引技巧、锁定水平等功能，使用不同的存储引擎，还可以获得特定的功能。常用的包括：</p>
-<ul>
-<li>InnoDB：由Innobase Oy公司开发的一款支持事务的数据库引擎，2006年被Oracle收购；</li>
-<li>MyISAM：MySQL早期集成的默认数据库引擎，不支持事务。</li>
-</ul>
-</blockquote>
-<h3 id="4-关系模型"><a href="#4-关系模型" class="headerlink" title="4. 关系模型"></a>4. 关系模型</h3><ul>
-<li><p>表的每一行称为记录（Record），表的每一列称为字段（Column），每一行由多个不同字段组成。</p>
-</li>
-<li><p>字段定义了数据类型，可以决定是否允许为NULL。一般为了加快速度避免允许为NULL。<em>NULL等于不存在，不等于0，不等于“”。</em></p>
-</li>
-<li><p>关系数据库的表与表之间存在三种关系，关系通过主键和外键来维护：</p>
-<ul>
-<li>一对一（如一个班级对应一个教室）</li>
-<li>一对多（如一个班级对应多个学生）</li>
-<li>多对一（如多个学生对应一个班级）</li>
-</ul>
-</li>
-<li><p>主键：关系表要求任意两条记录不能重复，且能够通过某个字段唯一区分出不同的记录，该字段称为主键，一般将其命名为id。主键要求记录一旦插入到表中，主键最好不要再修改，因此选取主键一个根本原则是：<strong>不使用任何业务相关的字段</strong>。主键也不应该允许为NULL。常见的可作为id字段的类型有：</p>
-<ul>
-<li><p>自增整数类型 <code>BIGINT NOT NULL AUTO_INCREMENT</code></p>
-</li>
-<li><p>全局唯一GUID类型</p>
+<li><p>异步性：多道程序环境下，允许多个进程并发执行，进程在使用资源时可能需要等待或放弃</p>
 </li>
 </ul>
-<p><em>联合主键：多个字段唯一标识记录，不常用</em>。</p>
 </li>
-<li><p>外键：在<code>students</code>表中，通过<code>class_id</code>的字段，可以把数据与另一张表关联起来，这种列称为外键。</p>
-<p>一对多关系，如一个班级有多个学生，这种关系通过在学生表中加入一列<code>class_id</code>实现。</p>
-<p>多对多关系通过两个一对多关系实现，即通过一个中间表实现。</p>
-<p>一对一关系，有时候并不可以合二为一，存在不存在的情况。</p>
-<p>外键通过定义外键约束实现：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">ADD CONSTRAINT fk_class_id</span><br><span class="line">FOREIGN KEY (class_id)</span><br><span class="line">REFERENCES class (id);</span><br></pre></td></tr></table></figure>
-
-<p>外键约束会降低数据库的性能，因此大部分互联网应用程序为了追求速度而不设置外键约束，仅靠应用程序保证逻辑正确。此时<code>class_id</code>只是一个普通的列，但起外键的作用。</p>
-<p>删除外键约束：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">DROP FOREIGN KEY fk_class_id;</span><br></pre></td></tr></table></figure>
-
-<p>删除列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP COLUMN ...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>索引：关系数据库中对某一列或多个列的值进行预排序的数据结构。例如如果经常需要根据<code>students</code>表里的<code>score</code>列进行查询，就可以对<code>score</code>列创建索引，创建一个名为<code>idx_score</code>,使用<code>score</code>列的索引：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">ADD INDEX idx_score (score);</span><br></pre></td></tr></table></figure>
-
-<p>索引也可以有多列，如<code>ADD INDEX idx_name_score (name, score);</code>。</p>
-<p>索引效率与散列度成正比。索引提高查询效率，但降低了插入、更新、删除记录的效率。</p>
-<p>保证某一列具有唯一性约束且可以当作索引时，可以创建唯一索引：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE students</span><br><span class="line">ADD UNIQUE INDEX uni_name (name);</span><br></pre></td></tr></table></figure>
-
-<p>也可以仅添加唯一约束而不创建唯一索引：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD CONSTRAINT uni_name UNIQUE (name);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-数据结构笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0/">数据结构笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2020-03-03T03:58:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近写leetcode一道关于LRU缓存的题目时发现上学期刚学过的数据结构一个寒假没怎么用就又双叒叕忘记了，每次看数据结构和算法都在怀疑自己的脑容量。正值疫情被困在家中，突然就感受到纸质笔记的弊端，正好趁着复习回顾的时候在博客上重新记录相关知识点。</p>
-<blockquote>
-<p>数据结构可以从逻辑上分为线性结构和非线性结构。线性结构有数组、栈、链表等，非线性结构有图、树等。注意线性和非线性与存储结构无关，只是逻辑上的划分，比如我们可以用数组去存储二叉树。</p>
-</blockquote>
-<h2 id="常见线性结构"><a href="#常见线性结构" class="headerlink" title="常见线性结构"></a>常见线性结构</h2><h3 id="1-数组-Array"><a href="#1-数组-Array" class="headerlink" title="1. 数组 Array"></a>1. 数组 Array</h3><p>数组是最简单的数据结构，存放<strong>同一种数据类型</strong>的集合。从增删改查四个方面来说，增删性能比较低，改查性能较高。</p>
-<h3 id="2-链表-LinkedList"><a href="#2-链表-LinkedList" class="headerlink" title="2. 链表 LinkedList"></a>2. 链表 LinkedList</h3><p>链表分为单向链表和双向链表。不存在下标的概念，增删性能较高，改查性能较低。</p>
-<h3 id="3-栈-Stack"><a href="#3-栈-Stack" class="headerlink" title="3. 栈 Stack"></a>3. 栈 Stack</h3><p>栈是一种运算受限的线性表，遵守先进后出的规则。仅允许在列表的一端添加和删除元素（栈顶），相对的把另一端称为栈底。</p>
-<p><strong>栈是基于数组实现的</strong>。</p>
-<h3 id="4-队列-Queue"><a href="#4-队列-Queue" class="headerlink" title="4. 队列 Queue"></a>4. 队列 Queue</h3><p>队列是一种运算受限的线性表，只允许表的前端进行删除操作（队头），表的后端进行添加操作（队尾）。</p>
-<p>单向队列遵循先进先出的规则，双向队头和队尾均可进行插入和删除操作。</p>
-<h3 id="5-哈希表-Hash"><a href="#5-哈希表-Hash" class="headerlink" title="5. 哈希表 Hash"></a>5. 哈希表 Hash</h3><p>元素的值和数组的下标有一个确定的对应关系，而不记录元素的添加顺序。最大用处是提高了数据的查找速率。</p>
-<h2 id="JAVA中的集合框架"><a href="#JAVA中的集合框架" class="headerlink" title="JAVA中的集合框架"></a>JAVA中的集合框架</h2><p><strong>Java中集合的接口和实现分离，一种集合可能有多种实现方式，但在程序中使用时并不需要究竟是哪种实现，只有在构建集合对象时才需要使用具体的类。</strong></p>
-<p>Java集合框架为不同类型的集合定义了大量的接口，其中两个基本接口为Collection和Map：</p>
-<pre><code> Iterable
-    |
-Collection                   Map              Iterator
-|     \   \                   |                   |
-List  Set Queue-Deque      SortedMap         ListIterator
-       |                      |
-      SortedSet           NavigableMap
-       |
-      NavigableSet</code></pre><h3 id="1-List"><a href="#1-List" class="headerlink" title="1. List"></a>1. List</h3><p>List是一种有序集合，可以使用迭代器或者整数索引（随机访问，random access）访问。</p>
-<blockquote>
-<p>集合的集合的有序、无序是指插入元素时，保持插入的顺序性，也就是先插入的元素优先放入集合的前面部分。 而排序是指插入元素后，集合中的元素是否自动排序（例如升序排序）。HashMap、HashSet、HashTable 等基于哈希存储方式的集合是无序的，TreeMap、TreeSet等集合是排序的，一般来说其它的集合都是有序的。</p>
-</blockquote>
-<h4 id="1-数组列表-ArrayList"><a href="#1-数组列表-ArrayList" class="headerlink" title="1. 数组列表 ArrayList"></a>1. 数组列表 ArrayList</h4><h4 id="2-链表-LinkedList-1"><a href="#2-链表-LinkedList-1" class="headerlink" title="2. 链表 LinkedList"></a>2. 链表 LinkedList</h4><p>Java中的链表均是双向链表，以减少在列表中间插入或删除元素所付出的代价。使用整数索引时不使用链表。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%94%E8%AE%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-简单工厂模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">简单工厂模式</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/01/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2020-03-01T09:23:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><p>考虑一个简单的软件应用场景，一个软件系统可以提供多个外观不同的按钮，这些按钮均源自同一个基类，不过在继承基类后不同的子类修改了部分属性使其外观不同。如果我们希望使用这些按钮时，无需知道具体按钮的名字，只需要知道表示该按钮类的一个参数，并提供一个调用方便的方法，把该参数传入方法即可返回一个相应的按钮对象，此时就可使用简单工厂模式。</p>
-<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><p>简单工厂模式（Simple Factory Pattern），又称为静态工厂方法（Static Factory Method）,属于类创建型模式。在简单工厂模式中，<strong>可以根据参数的不同返回不同类的实例</strong>。简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类。</p>
-<h2 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h2><ul>
-<li>将对象的创建与对象本身业务处理分离，降低耦合</li>
-<li>当你需要什么，只需要传入一个正确的参数，就可以获得所需对象，而无需知道具体创建细节<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> MotoVehicle <span class="title">motoLeaseOut</span><span class="params">(String brand,String type,<span class="keyword">int</span> seat,<span class="keyword">int</span> tons)</span> </span>&#123;</span><br><span class="line">		MotoVehicle moto=<span class="keyword">null</span>;</span><br><span class="line">		<span class="comment">//增强型for循环</span></span><br><span class="line">		<span class="keyword">for</span>(MotoVehicle mymoto:motos) &#123;</span><br><span class="line">			<span class="keyword">if</span>(mymoto <span class="keyword">instanceof</span> Car) &#123;<span class="comment">//判断当前对象属于哪一个类</span></span><br><span class="line">				Car car=(Car)mymoto;</span><br><span class="line">				<span class="keyword">if</span>(car.getBrand().equals(brand)&amp;&amp;car.getType().equals(type)) &#123;</span><br><span class="line">					moto=car;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(mymoto <span class="keyword">instanceof</span> Bus) &#123;</span><br><span class="line">				Bus bus=(Bus)mymoto;</span><br><span class="line">				<span class="keyword">if</span>(bus.getBrand().equals(brand)&amp;&amp;bus.getSeatCount()==seat)&#123;</span><br><span class="line">					moto=bus;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(mymoto <span class="keyword">instanceof</span> Truck) &#123;</span><br><span class="line">				Truck truck=(Truck)mymoto;</span><br><span class="line">				<span class="keyword">if</span>(truck.getBrand().equals(brand)&amp;&amp;truck.getTons()==tons) &#123;</span><br><span class="line">					moto=truck;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> moto;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/01/%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Java类继承" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/28/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/">Java类继承</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/28/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/" class="archive-article-date">
-  	<time datetime="2020-02-28T02:36:21.756Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong><em>继承一般发生在同一包之间</em></strong></p>
-<ul>
-<li>访问修饰符总结：<ul>
-<li>private：本类</li>
-<li>默认（firendly）：本类、同包</li>
-<li>protected：本类、同包、子类</li>
-<li>public：本类、同包、子类、其他</li>
-</ul>
-</li>
-</ul>
-<h2 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h2><ol>
-<li><p>子类通过super调用父类构造函数，在子类构造函数的第一行使用；</p>
-<p><strong>super的两个用途：</strong></p>
+</ol>
+<h3 id="2-进程管理"><a href="#2-进程管理" class="headerlink" title="2. 进程管理"></a>2. 进程管理</h3><ol>
+<li><p>进程实体</p>
 <ol>
-<li><p>调用父类构造器</p>
-</li>
-<li><p>调用超类方法（子类的方法不能够直接访问超类的私有域，因此访问私有域时需要调用父类的公有方法作为接口）</p>
-<p><em>不能访问父类private成员</em></p>
-</li>
-</ol>
-</li>
-<li><p>子类构造函数中没有显式地调用父类构造器时，会自动的调用父类的无参构造函数；当父类不存在无参构造函数时即报错；</p>
-</li>
-</ol>
-<h2 id="覆盖方法（Override）"><a href="#覆盖方法（Override）" class="headerlink" title="覆盖方法（Override）"></a>覆盖方法（Override）</h2><p>覆盖一定在继承中发生，方法值、参数表完全相同，返回值相同或是其子类，访问权限不能严于父类；注意与重载(Overload)区分。</p>
+<li><p>为什么需要进程：多道程序设计</p>
 <ul>
-<li>instanceof：用于判断类，常和强制类型转换（父类转换为子类）结合使用。</li>
+<li>进程是系统资源分配和调度的基本单位</li>
+<li>作为程序独立运行的载体保证程序正常执行</li>
+<li>使得操作系统资源的利用率大幅度提升</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Pet pet=<span class="keyword">new</span> Dog(); <span class="comment">//自动类型转换，由上到下</span></span><br><span class="line"></span><br><span class="line">Dog dog=(Dog) pet;</span><br><span class="line"></span><br><span class="line">Penguin png=(Penguin) pet;<span class="comment">//报错，必须转换为真实类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(pet instanced Penguin)&#123;</span><br><span class="line"></span><br><span class="line">	Penguin png=(Penguin) pet;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+</li>
+<li><p>进程的实体</p>
 <ul>
-<li>final修饰符：<ul>
-<li>修饰的类不能再被继承</li>
-<li>修饰的方法不能被覆盖</li>
-<li>修饰的变量将变成常量，只能在初始化时进行赋值</li>
-</ul>
+<li><p>主存中的进程形态：进程控制块PCB，用于描述和控制进程运行的通用数据结构，记录进程当前状态和控制进程运行的全部信息，PCB的存在使得进程是能够独立运行的基本单位</p>
+<p>PCB是常驻内存的（PCB区域）</p>
+<p>标识符：进程的标识</p>
+<p>状态：标记进程的进程状态，如运行或阻塞</p>
+<p>优先级：</p>
+<p>程序计数器：指向进程需要执行的下一条指令的地址</p>
+<p>内存指针：程序代码、进程数据相关指针</p>
+<p>上下文数据：进程执行时处理器存储的数据</p>
+<p>IO状态信息：被进程IO操作所占用的文件列表</p>
+<p>记账信息：存储使用处理器时间、时钟数总和等</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812155452443.png" alt="image-20200812155452443"></p>
+</li>
+<li><p>进程与线程</p>
+<p>进程Process</p>
+<p>线程Thread</p>
+<p>一个进程可以有多个线程，线程是操作系统进行运行调度的最小单位（进程是调度的基本单位），线程是进程中实际运行工作的单位，一个进程可以并发多个线程，每个线程执行不同的任务，线程共享进程资源</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812155831786.png" alt="image-20200812155831786"></p>
 </li>
 </ul>
-<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><ol>
-<li><p>“is-a”规则(置换规则)：使用超类对象的任何地方都可以用子类对象置换</p>
 </li>
-<li><p>多态的实现思路：</p>
-<ol>
-<li>子类继承父类</li>
-<li>子类重写方法</li>
-<li>超类引用指向子类对象</li>
 </ol>
-<p><strong><em>超类引用不可以调用子类特有方法</em></strong></p>
 </li>
-<li><p>多态的实现形式：</p>
+<li><p>五状态模型</p>
+<p>就绪、阻塞、执行、创建、终止</p>
 <ol>
-<li>使用父类作为方法形参</li>
-<li>使用父类作为方法返回值</li>
+<li><p>就绪状态：当进程被分配到除CPU以外所有必要的资源后就处于就绪状态（进程控制块、栈空间、堆空间等）</p>
+<p>就绪队列：多个就绪进程组成的队列</p>
+</li>
+<li><p>执行状态：获得CPU</p>
+</li>
+<li><p>阻塞状态：因某种原因放弃执行状态从而放弃CPU的状态</p>
+<p>阻塞队列：</p>
+</li>
+<li><p>创建状态：拥有PCB但其他资源尚未就绪，操作系统提供fork函数接口创建进程</p>
+<ol>
+<li>分配PCB</li>
+<li>插入就绪队列</li>
 </ol>
+</li>
+<li><p>终止状态：处于系统清理或PCB归还的状态</p>
+<ol>
+<li>系统清理</li>
+<li>PCB归还</li>
+</ol>
+</li>
+</ol>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812160800493.png" alt="image-20200812160800493"></p>
+</li>
+<li><p>进程同步</p>
+<ol>
+<li><p>为什么需要进程同步</p>
+<p>生产者消费者问题：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812162445574.png" alt="image-20200812162445574"></p>
+<p>哲学家进餐问题：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812162652578.png" alt="image-20200812162652578"></p>
+<p>根源问题：彼此相互之间没有通信，需要进程间的同步</p>
+<ul>
+<li>对竞争资源在多进程间进行使用次序的协调</li>
+<li>使得并发进程之间资源有效协调和同步</li>
+</ul>
+</li>
+<li><p>进程同步的原则</p>
+<p>临界资源：一些虽作为共享资源却又无法同时被多个线程共同访问的共享资源。当有进程在使用临界资源时，其他进程必须依据操作系统的同步机制等待占用进程释放该共享资源才可重新竞争使用共享资源</p>
+<ul>
+<li>空闲让进：资源无占用，允许使用</li>
+<li>忙则等待：资源有占用，请求进程等待</li>
+<li>有限等待：保证有限等待时间能够使用资源</li>
+<li>让权等待：等待时，进程需要让出CPU</li>
+</ul>
+<p>进程间同步的方法：消息队列、共享存储、信号量等方法</p>
+</li>
+<li><p>线程同步</p>
+<p>进程内多线程并发使用共享资源，进程内多线程也需要同步</p>
+<p>线程同步的方法：</p>
+<ul>
+<li>互斥量</li>
+<li>读写锁</li>
+<li>自旋锁</li>
+<li>条件变量</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>Linux进程管理</p>
+<ol>
+<li><p>相关概念</p>
+<ol>
+<li><p>进程的类型：</p>
+<ul>
+<li>前台进程：具有终端（shell），可以和用户交互的进程</li>
+<li>后台进程：没有占用终端的，基本上不和用户交互，优先级比前台低，将需要执行的命令以 &amp; 结束</li>
+<li>守护进程：一种特殊的后台进程，很多守护进程在系统引导的时候启动，进程名字以d结尾的一般都是守护进程</li>
+</ul>
+</li>
+<li><p>进程的标记</p>
+<ul>
+<li><p>进程的ID：进程的唯一标记，范围由操作系统所决定</p>
+<p>使用top命令可以查看linux所有进程</p>
+<p>进程的父子关系可以通过pstree来看</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812172459598.png" alt="image-20200812172459598"></p>
+<p>特殊进程：</p>
+<p>id为0为idle进程，是系统创建的第一个进程</p>
+<p>id为1为init进程，是0号进程的子进程，完成系统初始化，init进程是所有用户进程的祖先进程</p>
+</li>
+<li><p>进程的状态标记</p>
+<p>五状态</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812172640158.png" alt="image-20200812172640158"></p>
+<p>man ps可以查看状态</p>
+<p>ps -aux ｜ grep 进程id ：查看进程状态</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812172916450.png" alt="image-20200812172916450"></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>操作Linux进程的相关命令</p>
+<ol>
+<li><p>ps命令：查看当前进程状态，常配合aux参数或ef参数和grep命令检索特定进程</p>
+<p>ps：列出当前进程</p>
+<p>ps -aux：详细信息</p>
+<p>ps -u root：查看root用户进程</p>
+<p>ps -aux ｜ grep ‘python3’：查看python3的进程</p>
+<p>ps -ef –forest：查看进程树</p>
+<p>ps -aux –sort=-pcpu：按cpu排序</p>
+<p>ps -aux –sort=-pmem：按内存排序</p>
+</li>
+<li><p>top命令：查看所有进程的所有状态</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812173537744.png" alt="image-20200812173537744"></p>
+<p>PID USER PR（优先级） VIRT（虚拟内存） TIME+（运行时间）</p>
+</li>
+<li><p>kill命令：给特定进程发送指定信号，一般使用9退出信号</p>
+<p>kill -l可查看操作系统支持的信号</p>
+<p>kill -9 进程id：关闭进程（9是无条件停止）</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-作业管理"><a href="#3-作业管理" class="headerlink" title="3. 作业管理"></a>3. 作业管理</h3><ol>
+<li><p>进程调度</p>
+<ol>
+<li><p>进程调度概述</p>
+<p>进程调度指计算机通过决策决定哪个就绪进程可以获得CPU使用权：保留就进程运行信息，请出旧进程；选择新进程，准备运行环境并分配CPU</p>
+</li>
+<li><p>进程调度的机制</p>
+<ul>
+<li><p>就绪队列的排队机制</p>
+</li>
+<li><p>选择运行进程的委派机制：调度程序以一定的策略选择就绪进程，将CPU资源分配给它</p>
+</li>
+<li><p>新老进程的上下文切换进程：保存当前进程的上下文信息，装入被委派执行进程的运行上下文</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812175110635.png" alt="image-20200812175110635"></p>
+</li>
+</ul>
+</li>
+<li><p>进程的调度的分类：</p>
+<p>非抢占式调度（进程完成工作或IO阻塞才会让出）、抢占式调度（运行暂停，需要保存旧进程的上下文信息）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812175325833.png" alt="image-20200812175325833"></p>
+</li>
+<li><p>调度算法：</p>
+<ul>
+<li><p>先来先服务调度算法：优先调度队列前部进程</p>
+</li>
+<li><p>短进程优先调度算法：优先选择就绪队列中估计运行时间最短的进程</p>
+</li>
+<li><p>高优先权优先调度算法：优先选择权重高的进程（前台进程高于后台进程）</p>
+</li>
+<li><p>时间片轮转调度算法：最公平的算法</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812175710286.png" alt="image-20200812175710286"></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>死锁</p>
+<ol>
+<li><p>什么是死锁？</p>
+<p>死锁是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去，此时称系统处于死锁状态，永远在相互等待的进程称为死锁进程。</p>
+</li>
+<li><p>死锁的产生：</p>
+<ul>
+<li>竞争资源：共享资源数量不满足各个进程的需求</li>
+<li>进程调度顺序不当</li>
+</ul>
+</li>
+<li><p>死锁的四个必要条件：</p>
+<ul>
+<li>互斥条件：进程对资源的使用是排他性的使用</li>
+<li>请求保持条件：进程至少保持一个资源，又提出新的资源，新的资源被占用，进程不释放资源</li>
+<li>不可剥夺：进程未完成之前不会释放资源</li>
+<li>环路等待：发生死锁必然存在进程-资源环形链</li>
+</ul>
+</li>
+<li><p>预防死锁的方法</p>
+<ol>
+<li>破坏请求保持条件：系统规定进程运行之前，一次性申请所有需要的资源，运行期间不申请资源</li>
+<li>破坏不可剥夺条件：请求新的资源不满足时，进程资源释放</li>
+<li>破坏环路等待条件：可用资源线性排序，申请必须按照需要递增申请</li>
+</ol>
+</li>
+<li><p>银行家算法</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812180748727.png" alt="image-20200812180748727"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812181504904.png" alt="image-20200812181504904"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="4-存储管理"><a href="#4-存储管理" class="headerlink" title="4. 存储管理"></a>4. 存储管理</h3><ol>
+<li><p>内存分配与回收</p>
+<p>目的：</p>
+<ul>
+<li>确保计算机有足够的内存处理数据</li>
+<li>确保程序可以从可用内存中获取一部分内存使用</li>
+<li>确保程序可以归还使用后的内存以供其他程序使用</li>
+</ul>
+<ol>
+<li><p>内存分配的过程</p>
+<ol>
+<li><p>单一连续分配：最简单的内存分配方式，只能在单用户、单进程的操作系统中使用</p>
+<p>用户区给用户使用，系统区给系统使用</p>
+</li>
+<li><p>固定分区分配：支持多道程序的最简单存储方法，内存空间被划分为若干固定大小的区域，每个分区只提供给一个程序使用，互不干扰</p>
+</li>
+<li><p>动态分区分配：根据进程实际需要，动态分配内存空间</p>
+<ol>
+<li><p>动态分区空闲表数据结构</p>
+</li>
+<li><p>动态分区空闲链数据结构：节点需要记录可存储容量，节点大小可能不同</p>
+</li>
+<li><p>动态分区分配算法：</p>
+<ol>
+<li><p>首次适应算法FF：分配内存时顺序查找合适的内存区，没有合适的空闲区则分配失败</p>
+<p>循环适应算法：不再从头部开始寻找，而是从上次结尾处开始寻找</p>
+</li>
+<li><p>最佳适应算法：按空闲区链表容量大小排序，遍历空闲区链表找到最佳合适空闲区（避免大材小用）</p>
+</li>
+<li><p>快速适应算法：用多个空闲区链表保存不同容量的空闲区</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>内存回收的过程</p>
+<ol>
+<li>回收区在空闲区1后面：不需要新建空闲链表节点，只需要把空闲区1的容量增大为空闲区即可</li>
+<li>回收区在空闲区1前面：将回收区与空闲区合并，新的空闲区使用回收区的地址</li>
+<li>回收区位于两个空闲区之间：将三个区合并，使用第一个区的地址</li>
+<li>独立的空闲区：创建新的空闲链表节点，插入链表中</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>段页式存储管理：从进程的角度理解进程的存储管理，管理进程的内存空间</p>
+<ol>
+<li><p>页式存储管理：页面大小应该适中，过大难以分配，过小内存碎片过多，页面大小通常是512B到8K，需要页表记录进程逻辑空间与物理空间的映射</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812194458066.png" alt="image-20200812194458066"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812194806101.png" alt="image-20200812194806101"></p>
+<p>多级页表：避免页式存储页表存储占据内存空间大的问题（单级页表一个一个页面对应一个字块，当系统进程逻辑空间大的时候页表中存储页面也多，调用页表时需要把全部页表放入内存空间），多级页表的根页表指向的字块是内存空间，这个内存空间存储的是二级页表，调用页表时只需要将根页表放入内存空间再调用即可</p>
+<p>缺点：有一段连续的逻辑分布在多个页面中，将大大降低执行效率</p>
+</li>
+<li><p>段式存储管理</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812230928646.png" alt="image-20200812230928646"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812231020111.png" alt="image-20200812231020111"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812231053561.png" alt="image-20200812231053561"></p>
+</li>
+<li><p>段页式存储管理</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812231204625.png" alt="image-20200812231204625"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812231253094.png" alt="image-20200812231253094"></p>
+</li>
+</ol>
+</li>
+<li><p>虚拟内存</p>
+<ol>
+<li><p>虚拟内存概述：把程序使用内存划分，将部分暂时不使用的内存放置在辅存（进程放入虚拟内存中，只将部分页面放入物理内存；之前的页存储、段存储、段页式存储都是指进程放入物理内存中，通过逻辑地址访问物理地址）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812231712810.png" alt="image-20200812231712810"></p>
+</li>
+<li><p>程序的局部性原理：CPU访问存储器时，无论是存取指令还是存取数据，所访问的存储单元都趋于聚集在一个较小的连续区域中</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812231930107.png" alt="image-20200812231930107"></p>
+</li>
+<li><p>虚拟内存的置换算法：（和高速缓存的页面替换做对比，高速缓存主存层次的替换策略主要是为了解决速度问题，主存辅存主要是解决容量问题）</p>
+<ol>
+<li>先进先出算法FIFO</li>
+<li>最不经常使用算法LFU</li>
+<li>最近最少使用算法LRU</li>
+</ol>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812232051097.png" alt="image-20200812232051097"></p>
+</li>
+</ol>
+</li>
+<li><p>Linux的存储管理</p>
+<ol>
+<li><p>Buddy内存管理算法：主要解决内存外碎片问题，努力让内存分配与相邻内存合并能快速进行（外碎片转化为内碎片问题）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812232319860.png" alt="image-20200812232319860"></p>
+<ul>
+<li><p>内存分布原则：向上取整为2的幂大小</p>
+</li>
+<li><p>伙伴系统：一片连续内存的伙伴是相邻的另一片相同大小的内存</p>
+</li>
+<li><p>Buddy内存管理算法具体流程：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812232642021.png" alt="image-20200812232642021"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812232811517.png" alt="image-20200812232811517"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812232859999.png" alt="image-20200812232859999"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812232951256.png" alt="image-20200812232951256"></p>
+</li>
+</ul>
+</li>
+<li><p>Linux交换空间</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812233124900.png" alt="image-20200812233124900"></p>
+<p>用处：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812233258855.png" alt="image-20200812233258855"></p>
+<p>和虚拟内存：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200812233353398.png" alt="image-20200812233353398"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="5-文件管理"><a href="#5-文件管理" class="headerlink" title="5. 文件管理"></a>5. 文件管理</h3><ol>
+<li><p>文件的逻辑结构</p>
+<ol>
+<li><p>逻辑结构的文件类型</p>
+<ol>
+<li><p>有结构文件，如文本文件、文档、媒体文件</p>
+<p>由定长记录和可变长记录组成，定长记录存储文件格式、文件描述等结构化数据项，可变长记录存储文件具体内容</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813100643917.png" alt="image-20200813100643917"></p>
+</li>
+<li><p>无结构文件，如二进制文件，连接库等，又称流式文件，内容长度以字节为单位</p>
+</li>
+</ol>
+</li>
+<li><p>顺序文件：按照顺序存放在存储介质中的文件，如磁带，是所有逻辑文件当中存储效率最高的，但增删改效率低</p>
+</li>
+<li><p>索引文件：可变长文件不适合使用顺序文件格式存储，索引文件需要配合索引表来完成存储（key-逻辑地址，地址对于存储空间）</p>
+</li>
+</ol>
+</li>
+<li><p>辅存的存储空间分配</p>
+<ol>
+<li><p>辅存的分配方式：</p>
+<ol>
+<li><p>连续分配：顺序读取文件非常容易，速度快，但是对存储要求高，要求满足容量的连续存储条件</p>
+</li>
+<li><p>链接分配：将文件存储在离散的盘块中，需要额外的存储空间存储文件的盘块链接顺序</p>
+<ul>
+<li><p>隐式链接<img src="/Users/shuiyingying/blog/source/photos/image-20200813101235689.png" alt="image-20200813101235689"></p>
+</li>
+<li><p>显式链接</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813101316387.png" alt="image-20200813101316387"></p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813101403338.png" alt="image-20200813101403338"></p>
+<ol start="3">
+<li>索引分配：使用额外的盘块去存储文件的所有盘块信息，支持直接访问和存储空间大的情况<img src="/Users/shuiyingying/blog/source/photos/image-20200813101455764.png" alt="image-20200813101455764"></li>
+</ol>
+</li>
+<li><p>存储空间存储方式</p>
+<ol>
+<li><p>空闲表</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813101809477.png" alt="image-20200813101809477"></p>
+</li>
+<li><p>空闲链表</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813101828445.png" alt="image-20200813101828445"></p>
+</li>
+<li><p>位示图</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813101906988.png" alt="image-20200813101906988"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813101928927.png" alt="image-20200813101928927"></p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>目录管理：目录树</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813102054198.png" alt="image-20200813102054198"></p>
+</li>
+<li><p>Linux文件基本操作</p>
+<ol>
+<li><p>Linux目录</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813102504806.png" alt="image-20200813102504806"></p>
+<p>相对路径</p>
+<p> ../（返回上一级目录）</p>
+<p>绝对路径</p>
+</li>
+<li><p>Linux文件常用操作</p>
+<p>创建 touch file</p>
+<p>修改 vim file2</p>
+<p>查看文件内容 cat file2</p>
+<p>删除文件 rm file2</p>
+<p>创建文件夹 mkdir dir4</p>
+<p>删除文件夹 rm -r dir4 （递归的删除）</p>
+</li>
+<li><p>Linux文件类型 ls -al查看</p>
+<p>文件类型标记：第一位</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813103017003.png" alt="image-20200813103017003"></p>
+</li>
+</ol>
+</li>
+<li><p>Linux文件系统</p>
+<ol>
+<li><p>文件系统概览</p>
+<ol>
+<li>FAT：File Allocation Table，使用一张表存储文件信息</li>
+<li>NTFS：New Technology File System</li>
+<li>EXT：Extended file system，扩展文件系统，Linux的文件系统</li>
+</ol>
+</li>
+<li><p>EXT文件系统</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813103432521.png" alt="image-20200813103432521"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813103503250.png" alt="image-20200813103503250"></p>
+<ol>
+<li><p>Inode Table：存放文件Inode，每个文件都有一个Inode，是每一个文件/目录的索引，Inode中存储文件类型、文件权限、文件物理地址、文件长度、文件连接计数、文件存取时间、索引节点编号、文件状态、访问计数、链接指针等</p>
+<p>文件名不存储在Inode节点上，而是存放在目录的Inode节点上，当需要列出目录文件时无需要加载文件的Inode</p>
+</li>
+<li><p>Inode bitmap：Inode位示图，记录已分配的Inode和未分配的Inode</p>
+</li>
+<li><p>Data block：存放文件内容的地方，每个block都有唯一的编号，文件的block记录在文件的inode上</p>
+</li>
+<li><p>Block bitmap：记录Data block的使用情况</p>
+</li>
+<li><p>Superblock：记录整个文件系统相关信息的地方，记录Block、Inode的使用情况，时间信息，控制信息等</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>df -T 可以查看磁盘挂载文件系统信息</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813104117055.png" alt="image-20200813104117055"></p>
+<p>dumpe2fs 文件系统名 可以查看具体的文件系统信息</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813104228981.png" alt="image-20200813104228981"></p>
+<p>stat 文件名 查看文件的具体信息（Inode是唯一标记，name不是）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813104453823.png" alt="image-20200813104453823"></p>
+</li>
+</ol>
+<h3 id="6-设备管理"><a href="#6-设备管理" class="headerlink" title="6. 设备管理"></a>6. 设备管理</h3><ol>
+<li><p>广义的IO设备</p>
+<p>对CPU而言，凡是对CPU进行数据输入的都是输入设备，对CPU进行数据输出的都是输出设备</p>
+<ol>
+<li>按使用特性分为存储设备（U盘、内存、磁盘）和交互设备（键盘、显示器等）</li>
+<li>按信息交换的单位分为块设备（磁盘、SD卡）和字符设备（打印机、Shell终端）</li>
+<li>按设备的共享属性分为独占设备、共享设备、虚拟设备</li>
+<li>按传输速率分为低速、中速、高速设备</li>
+</ol>
+</li>
+<li><p>IO设备的缓冲区：CPU和IO设备的速率不匹配</p>
+<p>减少CPU处理IO请求的频率，提高CPU与IO设备之间的并行性</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813105007273.png" alt="image-20200813105007273"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813105024143.png" alt="image-20200813105024143"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813110813011.png" alt="image-20200813110813011"></p>
+</li>
+<li><p>SPOOLing技术：慢速字符设备如何与计算机主机交换信息的技术</p>
+<p>利用高速共享设备将低速的独享设备模拟为高速的共享设备，逻辑上，系统为每一个用户都分配了一台独立的高速独享设备</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813111051146.png" alt="image-20200813111051146"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200813111118829.png" alt="image-20200813111118829"></p>
 </li>
 </ol>
 
@@ -1023,7 +697,7 @@ List  Set Queue-Deque      SortedMap         ListIterator
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/28/Java%E7%B1%BB%E7%BB%A7%E6%89%BF/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/08/10/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">展开全文 >></a>
         </p>
       
 
@@ -1053,59 +727,579 @@ List  Set Queue-Deque      SortedMap         ListIterator
 
 
   
-    <article id="post-hexo学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-计算机网络" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/28/hexo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">hexo学习笔记</a>
+      <a class="article-title" href="/2020/07/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
     </h1>
   
 
         
-        <a href="/2020/02/28/hexo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="archive-article-date">
-  	<time datetime="2020-02-28T01:40:43.924Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-28</time>
+        <a href="/2020/07/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="archive-article-date">
+  	<time datetime="2020-07-21T01:35:39.726Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h2><ol>
-<li>初始化博客 sudo hexo init</li>
-<li>hexo s //start</li>
-<li>创建新的文章 hexo new “文章名”</li>
-<li>修改文章可使用vim</li>
-<li>hexo clean</li>
-<li>hexo g //generate</li>
-</ol>
-<h2 id="远程部署到github"><a href="#远程部署到github" class="headerlink" title="远程部署到github"></a>远程部署到github</h2><ol>
-<li><p>cnpm install –save hexo-deployer-git</p>
+        <h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><h3 id="1-计算机网络的层次结构"><a href="#1-计算机网络的层次结构" class="headerlink" title="1. 计算机网络的层次结构"></a>1. 计算机网络的层次结构</h3><ol>
+<li><p>层次结构设计的基本原则：为了分层实现不同的功能</p>
+<ul>
+<li>各层之间相互独立</li>
+<li>每一层有足够的灵活性</li>
+<li>各层之间完全解耦</li>
+</ul>
 </li>
-<li><p>修改 _config.yml 文件的deploy部分：</p>
-<p>type: git</p>
-<p>repo: 远程仓库地址（注意远程仓库名应该与用户名相同）</p>
-<p>branch: master</p>
+<li><p>OSI七层模型</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200720222028926.png" alt="image-20200720222028926"></p>
 </li>
-<li><p>hexo clean</p>
-</li>
-<li><p>hexo g</p>
-</li>
-<li><p>hexo d //deploy</p>
+<li><p>TCP/IP四层模型 ✨</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200720222250672.png" alt="image-20200720222250672">)<img src="/Users/shuiyingying/blog/source/photos/image-20200720222344254.png" alt="image-20200720222344254"></p>
 </li>
 </ol>
-<h2 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h2><ol>
-<li><p>将主题下至themes文件夹内</p>
+<h3 id="2-计算机网络的性能指标"><a href="#2-计算机网络的性能指标" class="headerlink" title="2. 计算机网络的性能指标"></a>2. 计算机网络的性能指标</h3><ol>
+<li><p>速度单位：bps=bit/s，mbps</p>
 </li>
-<li><p>修改 _config.yml 文件的theme部分</p>
+<li><p>时间</p>
+<ol>
+<li>时延：</li>
+</ol>
+<ul>
+<li><p>发送时延：本机进行网络发送时在本机所停留的时间</p>
+<p>​                    数据长度（bit）/发送速率（bit/s)：受限于计算机网卡</p>
 </li>
-<li><p>hexo clean</p>
+<li><p>传播时延：传播路径距离/传播速率（bit/s)：受限于传输介质</p>
 </li>
-<li><p>hexo g</p>
+<li><p>排队时延：数据包在网络设备中等待被处理的时间</p>
 </li>
-<li><p>hexo d</p>
+<li><p>处理时延：数据包到达设备或目的机器被处理所需要的时间</p>
+</li>
+<li><p>总时延=所有时延之和</p>
+</li>
+</ul>
+<ol start="2">
+<li>往返时间RTT：评估网络质量的一项重要指标，表示数据报文在端到端通信中来回一次的时间，可以使用ping命令查看</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-物理层概述"><a href="#3-物理层概述" class="headerlink" title="3.物理层概述"></a>3.物理层概述</h3><ol>
+<li><p>物理层的作用：连接不同的物理设备、传输比特流</p>
+<p>物理层传输介质：有线（光线、双绞线等）、无线（红外线等）</p>
+</li>
+<li><p>信道的基本概念：往一个方向传送信息的媒体（一个通信电路包含一个接受信道和发送信道）</p>
+<p>单工、半双工、全双工通信信道（同时发生和接收信息）</p>
+</li>
+<li><p>信道的分用-复用技术：通过分用器和复用器提高信道使用率，但计算机过多也可能造成堵塞</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721085938123.png" alt="image-20200721085938123"></p>
+</li>
+</ol>
+<h3 id="4-数据链路层：管理相邻节点之间的数据通信"><a href="#4-数据链路层：管理相邻节点之间的数据通信" class="headerlink" title="4. 数据链路层：管理相邻节点之间的数据通信"></a>4. 数据链路层：管理相邻节点之间的数据通信</h3><p>三个功能：</p>
+<ol>
+<li><p>封装成帧：帧首部 帧数据（IP数据报） 帧尾部</p>
+<p>帧是数据链路层数据的基本单位（比特位是物理层数据基本单位），发送端在网络层的一段数据前后添加特定的标记（特定比特流）形成帧，接收端根据前后特定标记识别出帧</p>
+</li>
+<li><p>透明传输</p>
+<p>透明：即使控制字符在帧数据中，也要当作不存在来处理</p>
+<p>数据链路层会对数据报帧数据里面的控制字符/转义字符用转义字符来转义</p>
+</li>
+<li><p>差错监测：物理层只管传输比特流，无法控制是否出错</p>
+<p>数据链路层只进行数据检测，不进行纠正（错误直接丢弃）</p>
+<ol>
+<li><p>奇偶校验码：在比特流尾部添加一位比特位确定是否出错（比特流中奇数个1在尾部添加1，偶数个1在尾部添加0），出错两位就无法检测错误了</p>
+</li>
+<li><p>循环冗余校验码CRC：根据传输或保存的数据而产生固定位数校验码的方法</p>
+<p>模2除法：余数是除数和被除数异或的结果（不带进位的二进制除法，既不向上位借位，也不比较除数和被除数的相同位数值的大小，只要以相同位数进行相除即可）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721091838756.png" alt="image-20200721091838756"></p>
+<p>CRC：</p>
+<ul>
+<li>发送端：错误检测能力与阶数r有关，r=1即为奇偶校验码</li>
+</ul>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721092251661.png" alt="image-20200721092251661"></p>
+<ul>
+<li>接收端：收到的数据除以G(x)位串判断余数是否为0</li>
+<li>例子</li>
+</ul>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721092409891.png" alt="image-20200721092409891"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721092659583.png" alt="image-20200721092659583"></p>
+<p>![image-20200721092731133](/Users/shuiyingying/Library/Application Support/typora-user-images/image-20200721092731133.png)</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721092945480.png" alt="image-20200721092945480"></p>
+</li>
+</ol>
+<p>最大传输单元MTU：</p>
+</li>
+<li><p>MTU（Maximum Transmission Unit）：数据链路层的数据帧不是无限大的</p>
+<p>以太网MTU一般为1500字节，过大时延会大</p>
+</li>
+<li><p>路径MTU：链路中MTU的最小值</p>
+</li>
+</ol>
+<p>以太网协议详解：</p>
+<ol>
+<li><p>MAC地址（物理地址、硬件地址）：每一个设备都拥有唯一的MAC地址，48位，通过十六进制表示  ifconfig查看/ipconfig /all</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">en3: flags&#x3D;8863&lt;UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST&gt; mtu 1500</span><br><span class="line">	ether ac:de:48:00:11:22  &#x2F;&#x2F;mac地址</span><br><span class="line">	inet6 fe80::aede:48ff:fe00:1122%en3 prefixlen 64 scopeid 0x4 </span><br><span class="line">	nd6 options&#x3D;201&lt;PERFORMNUD,DAD&gt;</span><br><span class="line">	media: autoselect (100baseTX &lt;full-duplex&gt;)</span><br><span class="line">	status: active</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以太网协议：广泛的局域网技术，应用于数据链路层的协议，完成相邻设备的数据帧传输</p>
+<p>数据：地址48位/6字节</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721094604392.png" alt="image-20200721094604392"></p>
+<p>MAC地址表：将MAC地址映射到硬件接口（路由器所拥有的）</p>
+<p>可以知道MAC地址表只能提供相邻节点的传输，还需要网络层才能跨节点传输</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721094827693.png" alt="image-20200721094827693"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721094927803.png" alt="image-20200721094927803"></p>
+</li>
+</ol>
+<h3 id="5-网络层：数据路由（决定数据在网络的路径）"><a href="#5-网络层：数据路由（决定数据在网络的路径）" class="headerlink" title="5. 网络层：数据路由（决定数据在网络的路径）"></a>5. 网络层：数据路由（决定数据在网络的路径）</h3><p><img src="/Users/shuiyingying/blog/source/photos/image-20200721221440745.png" alt="image-20200721221440745"></p>
+<ol>
+<li><p>IP协议详解</p>
+<ol>
+<li><p>虚拟互连网络</p>
+<p>实际的计算机网络是错综复杂的，物理设备通过IP协议，屏蔽了物理网络之间的差异，只需要关注端到端的连接（通过虚拟互连网络连接）。</p>
+</li>
+<li><p>IP协议：（向上）使得复杂的实际网络变为一个虚拟互连的网络，屏蔽底层细节而专注网络层的开发，（向下）解决了在虚拟网络中数据包传输路径的问题。</p>
+<ul>
+<li><p>MAC地址：48位，16进制，物理设备的唯一地址，不可改变</p>
+</li>
+<li><p>IP地址：32位，点分十进制（四个八位，0到255），网络设备的唯一地址，随着网络状态的变化可改变</p>
+</li>
+</ul>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200721222415532.png" alt="image-20200721222415532"></p>
+<p>![image-20200721222435746](/Users/shuiyingying/Library/Application Support/typora-user-images/image-20200721222435746.png)</p>
+<p>IP首部：5行必须存在的内容，每一行都是32位/4B，</p>
+<p>​                    即IP首部至少20个字节的长度</p>
+<ul>
+<li>4位版本：ipv4/6，通信双方版本应该相同</li>
+<li>4位首部位长度：最大数值15，表示IP首部长度，单位是32位字（4个字节），即IP首部最长60个字节</li>
+<li>16位总长度：最大数值位65535，单位字节，表示IP数据报的总长度（&gt; <em>MTU</em>时分片传输）</li>
+<li>标识、标志（是否可以分片传输）、片偏移（记录片）</li>
+<li>8位生存时间TTL：表面IP数据报文在网络中的寿命，每经过一个设备减1，=0时网络设备必须丢弃该报文（避免找不到终点无限次传输）</li>
+<li>8位协议：表明IP数据具体带什么协议（如TCP、UDP等）</li>
+<li>16位首部校验和：校验IP首部是否出错</li>
+<li>32位源IP地址</li>
+<li>32位目的IP地址</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>IP协议的转发流程</p>
+<ol>
+<li><p>逐跳（hop-by-hop）</p>
+</li>
+<li><p>路由表：目的IP地址-下一跳IP地址，计算机和路由器都拥有</p>
+<p>MAC地址表：路由器根据数据帧的前六个字节匹配MAC地址表找到硬件接口（MAC地址-硬件接口）</p>
+</li>
+<li><p>IP协议转发</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722090812954.png" alt="image-20200722090812954"></p>
+<p>![image-20200722091206213](/Users/shuiyingying/Library/Application Support/typora-user-images/image-20200722091206213.png)</p>
+<p>![image-20200722091708016](/Users/shuiyingying/Library/Application Support/typora-user-images/image-20200722091708016.png)</p>
+<p>数据帧每一跳MAC地址都在变化，IP数据报每一跳的IP地址都不变</p>
+</li>
+</ol>
+</li>
+<li><p>ARP协议和RARP协议：是TCP/IP协议栈里基础的协议</p>
+<p>Address Resolution Protocal：地址解析协议，将网络层32位IP地址转化为数据链路层48位MAC地址，通过ARP缓存表映射（ip地址-mac地址）</p>
+<ul>
+<li><p>ARP缓存表有映射关系：数据链路层根据映射到的MAC地址添加帧首部</p>
+</li>
+<li><p>ARP缓存表没有映射关系：ARP协议广播IP地址，和该广播地址IP地址相同的计算机回应，ARP会记录这些地址</p>
+<p>主机发送信息时将包含目标IP地址的ARP请求广播到网络上所有的主机并接收返回信息，以此确定目标的物理地址；收到返回信息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间。</p>
+<p>ARP协议是无状态的协议，不检查自己是否发送过请求包，也不知道是否是合法的应答，只要收到目标MAC是自己的ARP reply或arp广播包，都会接受并缓存。</p>
+<p>网络链路层MAC表里没有对应的硬件设备端口时操作相同。</p>
+</li>
+</ul>
+<p>ARP缓存表中记录并不是永久有效的，有一定的期限（IP地址是可变换的）</p>
+<p>查看ARP缓存表：arp -a</p>
+<p>ARP协议是封装在数据帧的，但是属于网络层：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722093248415.png" alt="image-20200722093248415"></p>
+<p>Reverse Address Resolution：逆地址解析协议，将数据链路层48位MAC地址转化为32位网络层IP地址</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722093415971.png" alt="image-20200722093415971"></p>
+</li>
+<li><p>IP地址的子网划分：2的32次方（42亿的ip地址）</p>
+<ol>
+<li><p>分类的IP地址</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722094254670.png" alt="image-20200722094254670"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722094610936.png" alt="image-20200722094610936"></p>
+<p>特殊的主机号：主机号全0表示当前网络段，不可分配为特定主机；主机号全1表示广播地址，向当前网络段所有主机发消息</p>
+<p>特殊段网络号：</p>
+<p>​    A类：网络段全0表示特殊地址，网络段后七位全1（127）表示回环地址（代表设备本地虚拟接口，并不属于某一类，可以通过ping来检查本地网络协议是否正常）</p>
+<p>​    B类：128.0</p>
+<p>​    C类：192.0.0</p>
+<p>​    D类、E类（1110，1111）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722095442043.png" alt="image-20200722095442043"></p>
+</li>
+<li><p>划分子网：主机号再划分，以达到节省网络号的目的（如需要100个主机号，只需划分193.10.10.128-255即可，而不再是193.10.10.0-255）</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722095731457.png" alt="image-20200722095731457"></p>
+<p>划分子网后如何快速区分IP地址属于哪一类网络号？</p>
+<p>子网掩码：和IP地址一样32位，由连续的1和连续的0组成，网络号及子网号对应1，主机号对应0。子网掩码与IP地址进行与运算即可得到网络号。</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722100132976.png" alt="image-20200722100132976"></p>
+</li>
+<li><p>无分类编址CIDR：没有ABC和子网概念，将网络前缀相同的IP地址称为一个CIDR地址块</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722100600100.png" alt="image-20200722100600100"></p>
+<p>使用斜线记法：/网络前缀位数</p>
+<p>如：192.10.10.129/25：网络前缀为192.10.10.128</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200722101417544.png" alt="image-20200722101417544"></p>
+</li>
+</ol>
+</li>
+<li><p>网络地址转换NAT技术：解决IP地址复用问题</p>
+<ol>
+<li><p>内网地址：内部机构使用的，避免与外网地址重复，不同内部机构内网地址可以相同</p>
+<p>A类：10.0.0.0-10.255.255.255 支持千万数量级</p>
+<p>B类：172.16.0.0-172.31.255.255 百万</p>
+<p>C类：192.168.0.0-192.168.255.255 万</p>
+</li>
+<li><p>外网地址：全球范围内使用的，全球公网唯一</p>
+</li>
+<li><p>网络地址转换：用于多个主机通过一个公有IP访问互联网的私有网络中</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200727233121476.png" alt="image-20200727233121476"></p>
+<p>通过本地路由器将内网的地址及端口号映射成为外网的地址以及端口号与外网通信，再将返回结果的外网地址及端口号映射为内网的地址和端口号</p>
+<p>通过NAPT表实现，减缓了IP地址消耗，但增加了网络通信的复杂度</p>
+</li>
+</ol>
+</li>
+<li><p>ICMP协议：网络控制报文协议（Internet Control Message Protocal），用于辅助IP协议进行数据传输，可以报告错误信息或异常情况</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803194943267.png" alt="image-20200803194943267"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803195113988.png" alt="image-20200803195113988"></p>
+<ul>
+<li><p>差错报告报文</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803195144564.png" alt="image-20200803195144564"></p>
+</li>
+<li><p>询问报文</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803195259971.png" alt="image-20200803195259971"></p>
+</li>
+</ul>
+<p>ICMP协议的应用：</p>
+<ul>
+<li><p>Ping应用：使用ICMP的询问报文中的回送请求或应答</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803195615723.png" alt="image-20200803195615723"></p>
+<p>ping也常用于测试网络状况，可以通过ping 127.0.0.1测试回环地址</p>
+</li>
+<li><p>Traceroute：可以探测IP数据报在网络中走过的路径</p>
+<p>当TTL=0时，网络设备丢弃该报文，并会返回ICMP终点不可达报文</p>
+<p>Traceroute会发送TTL=1、2、…的报文，探测路径</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803200352954.png" alt="image-20200803200352954"></p>
+</li>
+</ul>
+</li>
+<li><p>网络层的路由：如何解决路由表的构建和更新维护？</p>
+<ol>
+<li><p>网络的划分：自治系统（AS）是处于一个管理机构控制之下的路由器和网络群组，AS内部网络自行管理，对外提供一个或多个接口</p>
+<p>自治系统内部路由的协议称为：内部网关协议（RIP、OSPF）</p>
+<p>自治系统外部路由的协议称为：外部网关协议（BGP）</p>
+</li>
+<li><p>内部网关路由协议</p>
+<ol>
+<li><p>RIP协议</p>
+<ul>
+<li><p>距离矢量（DV)算法</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803201923502.png" alt="image-20200803201923502"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803201943429.png" alt="image-20200803201943429">)<img src="/Users/shuiyingying/blog/source/photos/image-20200803202027878.png" alt="image-20200803202027878"></p>
+<p>DV算法：求出dij最小值</p>
+<p>如A节点和B节点交换，A根据B节点的D向量计算到各个节点的距离，如果运算值比自己的距离矢量D小，则更新D和S</p>
+<p>注意AB和BA的距离可能不同，因为可能没有更新</p>
+</li>
+<li><p>RIP协议（Routing Information Protocal）：实现简单，开销小，但限制了网络的规模，故障信息传递慢（无条件相信相邻节点的路由信息）</p>
+<p>把网络的跳数作为DV算法的距离，每隔30s交换一次路由消息，认为跳数&gt;15的路由是不可达的</p>
+<ol>
+<li><p>路由器初始化路由信息（两个向量D、S）</p>
+</li>
+<li><p>对相邻路由器X发过来的信息，对信息的内容进行修改（下一跳地址设置为X，所有距离加1）：</p>
+<p>检索本地路由，将信息中新的路由插入到路由表</p>
+<p>检索本地路由，对于下一跳为X的，更新为修改后的信息（最新的信息，无论距离大小都会更新）</p>
+<p>检索本地路由，对比相同目的的距离，如果新信息距离更小，则更新本地路由表</p>
+</li>
+<li><p>如果3分钟没有收到相邻路由信息，则把相邻路由设置为不可达（16跳）</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>OSPF协议</p>
+<ol>
+<li><p>Dijkstra算法：一个节点到各个节点的最短路径问题</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803204420793.png" alt="image-20200803204420793"></p>
+</li>
+<li><p>OSPF协议：</p>
+<ol>
+<li><p>链路状态（LS）协议：（可以避免RIP协议只能获得隔壁节点信息的问题）</p>
+<ul>
+<li>向所有的路由器发送消息（一传十、十传百）</li>
+<li>消息描述该路由器与相邻路由器的链路状态：如距离、时延、带宽等（RIP只传递跳数信息）</li>
+<li>只有在链路状态发生变化时才发送更新信息</li>
+</ul>
+</li>
+<li><p>OSPF：Open Shortest Path First 开放最短路径优先</p>
+<p>核心是Dijkstra算法，实现了LS协议</p>
+<ul>
+<li><p>获得网络中的所有信息，每个路由器都有网络的完整拓扑，即链路状态数据库（可以使用Dijkstra算法）</p>
+</li>
+<li><p>消息描述更全面</p>
+</li>
+<li><p>只有在链路状态发生变化时才发送更新信息</p>
+<p>五种消息类型：</p>
+<ul>
+<li>问候消息（Hello）</li>
+<li>链路状态数据库描述信息</li>
+<li>链路状态请求信息</li>
+<li>链路状态更新信息</li>
+<li>链路状态确认消息</li>
+</ul>
+</li>
+</ul>
+<p>具体过程：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803205846739.png" alt="image-20200803205846739"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803205951045.png" alt="image-20200803205951045"></p>
+</li>
+</ol>
+</li>
+<li><p>外部网关路由协议：BGP协议，Border Gateway Protocol</p>
+<p>运行在AS之间的一种协议，AS与AS可能是不同的内部协议，且需要考虑网络特性以外的一些因素，且互联网较大，不适合使用链路协议</p>
+<p>BGP找到的是比较好的路由，而不是最好的路由（Dijkstra）</p>
+<p>BGP发言人（speaker）：AS之间通过BGP发言人交流信息，可以人为配置策略，且BGP不关心内部网络拓扑</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="6-传输层：管理端到端的通信连接（路由器无）"><a href="#6-传输层：管理端到端的通信连接（路由器无）" class="headerlink" title="6. 传输层：管理端到端的通信连接（路由器无）"></a>6. 传输层：管理端到端的通信连接（路由器无）</h3><p>传输层的本质是进程与进程的通信，进程可以跨设备、跨网络（与操作系统中Unix域套接字、共享内存不同，单机进程通信），使用端口（Port）标记不同的网络进程，使用16比特位表示（0-65535）。</p>
+<ol>
+<li><p>UDP协议详解：User Datagram Protocol，用户数据报协议</p>
+<p>UDP是一个非常简单的协议</p>
+<ul>
+<li>数据报Datagram：应用层传递过来的数据，UDP不合并不拆分不处理，直接封装到数据报</li>
+</ul>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803214714342.png" alt="image-20200803214714342"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803214738729.png" alt="image-20200803214738729"></p>
+<p>UDP协议的特点：</p>
+<ul>
+<li>UDP是无连接协议：数据想发就发，无法保证数据在网络中不会丢失，丢失了也不知道</li>
+<li>UDP不能保证可靠的交付数据</li>
+<li>UDP是面向报文传输的（数据报）：不会对报文进行任何处理</li>
+<li>UDP没有拥塞控制</li>
+<li>UDP首部开销很小</li>
+</ul>
+</li>
+<li><p>TCP协议详解：Transmission Control Protocol，传输控制协议</p>
+<p>TCP协议是一个复杂的协议</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803215348630.png" alt="image-20200803215348630"></p>
+<ol>
+<li><p>TCP协议的特点</p>
+<ul>
+<li>TCP是面向连接的协议</li>
+<li>TCP的一个连接有两端（点对点的通信）</li>
+<li>TCP提供可靠的传输服务</li>
+<li>TCP协议提供全双工的通信</li>
+<li>TCP是面向字节流的协议：可能对用户的数据进行分拆或合并</li>
+</ul>
+</li>
+<li><p>TCP协议首部</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803215940574.png" alt="image-20200803215940574"></p>
+<ol>
+<li><p>序号：一个字节一个序号（0-2^32-1），TCP数据报数据的第一个字节的序号即为TCP数据报的序号</p>
+</li>
+<li><p>确认号：一个字节一个序号（0-2^32-1），表示期望收到数据的首字节序号，确认号为N则表示N-1的数据都收到了</p>
+</li>
+<li><p>数据偏移：占4位（0-15），单位为32位字，表示数据偏离首部的距离（首部TCP选项等可选部分），最大数据偏移位60字节，即TCP首部最大位60字节</p>
+</li>
+<li><p>保留字段</p>
+</li>
+<li><p>TCP标记：占6位，每位各有不同意义</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200803220520247.png" alt="image-20200803220520247"></p>
+</li>
+<li><p>窗口：占16位（0-2^15），指明允许对方发送的数据量，单位为字节</p>
+</li>
+<li><p>紧急指针：URG=1启动，指定紧急数据在报文的位置</p>
+</li>
+<li><p>TCP选项：最多40字节，支持未来的拓展</p>
+</li>
+</ol>
+</li>
+<li><p>可靠传输的基本原理</p>
+<ol>
+<li><p>停止等待协议</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200804220905196.png" alt="image-20200804220905196"></p>
+<p>超时重传：发送方没有收到确认消息，等待一段时间后重传（发送消息丢失、确认消息丢失、确认消息很久才到）</p>
+<p>超时定时器：没发送一个消息，都需要设置一个定时器</p>
+<p>缺点：对信道的利用效率不高，需要等待确认消息的到来</p>
+</li>
+<li><p>连续ARQ协议：</p>
+<p>Automatic Repeat reQuest，自动重传请求</p>
+<p>同时发送批量消息，改善停止等待协议</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200804221331630.png" alt="image-20200804221331630"></p>
+<p>滑动窗口+累计确认（减少确认报文的数量）</p>
+</li>
+</ol>
+</li>
+<li><p>TCP协议的可靠传输：基于连续ARQ协议</p>
+<p>TCP的滑动窗口以字节为单位</p>
+<p>没有按序收到也需要重传-&gt;选择重传</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200804221742459.png" alt="image-20200804221742459"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200804221813396.png" alt="image-20200804221813396"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200804221858008.png" alt="image-20200804221858008"></p>
+<p>选择重传需要指定的需要重传的字节：通过序号（32位）表示需要重传的字节的边界，存储在TCP选项中（TCP选项最多40个字节，即10个序号）</p>
+</li>
+<li><p>TCP协议的流量控制：TCP独有的功能</p>
+<p>让发送方的发送速率不要太快，使用滑动窗口实现</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200805104512701.png" alt="image-20200805104512701"></p>
+<p>通知发送方窗口1000的报文丢失时回引发死锁：发送方认为窗口为0，接收方等待发送方传送报文？</p>
+<p>使用坚持定时器，接收到窗口为0的消息就会启动坚持定时器，每隔一段时间发送一个窗口探测报文</p>
+</li>
+<li><p>TCP协议的拥塞控制：考虑整个网络，是全局性的考虑</p>
+<p>流量控制考虑点对点的通信量的控制</p>
+<ol>
+<li><p>判断网络是否拥塞？</p>
+<p>报文超时（不能排除网络控制）</p>
+</li>
+<li><p>慢启动算法：由小到大逐渐增加发送数据量</p>
+<p>每收到一个报文确认就加1（指数增长1、2、4、8…）</p>
+<p>增长到慢启动阈值ssthresh</p>
+</li>
+<li><p>拥塞避免算法：维护一个拥塞窗口的变量（&gt;=ssthresh)</p>
+<p>只要网络不拥塞，就试探着拥塞窗口调大</p>
+</li>
+</ol>
+</li>
+<li><p>TCP连接的建立：三次握手</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200805105550056.png" alt="image-20200805105550056"></p>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code>第一次：发送方向接收方发送SYN=1表示请求连接，seq=x表示发送方数据报文当前的序列号
+
+第二次：接收方向发送方发送SYN=1表示连接，ACK=1表示接受到的数据报文序列号生效，seq=y表示自己的序列号，ack=x+1表示期望下一次接收到的序列号
+
+第三次：发送方向接收方发送ACK=1表示收到的报文序列号生效，seq=x+1表示自己的序列号，ack=y+1表示期望下一次接受到的序列号
+
+至此，连接以及建立，两方的序列号也已经同步，可以开始进行数据传输
+
+![image-20200805105944842](/Users/shuiyingying/blog/source/photos/image-20200805105944842.png)
+
+两次握手就可以建立起连接了，为什么需要第三次握手？
+
+避免已经失效的请求到达接收方，引发不必要的错误。
+
+当发送方第一次请求失效时会再次发送第二次请求，此时接收方收到第二次请求并回应，发送方接收到回应并再次请求才会建立连接，且发送方接收到回应后，会忽略已经超时的第一次请求到达接收方发送的回应，如果两次握手建立连接在这种情况下则会重复建立连接。</code></pre><ol start="8">
+<li><p>TCP连接的释放：四次挥手</p>
+<p>发送方主动释放：发动方有等待计时器</p>
+<p>关闭等待是因为接收方被动释放，可能仍有数据传输，等待接收方数据传输结束后会再次确认发送放的第一次挥手数据报，并进行第三次挥手</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200805111244483.png" alt="image-20200805111244483"></p>
+<p>等待计时器等待的时间：2MSL（Max Segment Lifetime，最长报文寿命，一般设置为2分钟），主动释放方只有等待计时器结束后才会释放端口</p>
+<ol>
+<li>因为最后一个报文没有确认，确保发送方的ACK可以到达接收方，2MSL是报文可以存活的最长时间，如果2MSL时间内接收方没有收到第四次报文，接收方会重发第三次报文</li>
+<li>确保当前连接的所有报文都已经过期</li>
+</ol>
+</li>
+</ol>
+<ol start="3">
+<li><p>套接字与套接字编程</p>
+<p>使用端口（Port）来标记不同的网络进程，端口使用16比特位来表示（0到65535），使用网络套接字{IP:PORT}来表示TCP连接的一端，通过套接字可以进行数据发送或接收，TCP连接由两个套接字组成</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200805112044967.png" alt="image-20200805112044967"></p>
+<ol>
+<li><p>服务端：被动连接的一方</p>
+</li>
+<li><p>客户端</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200805112201088.png" alt="image-20200805112201088"></p>
+</li>
+</ol>
+<p>网络套接字和域套接字：网络套接字无论是否跨网络都会经过协议栈（四层），域套接字进行数据传输无需经过协议栈，因此单机连接推荐使用域套接字</p>
+</li>
+</ol>
+<h3 id="7-应用层（应用层-表示层-对话层）：定义应用间通信的规则"><a href="#7-应用层（应用层-表示层-对话层）：定义应用间通信的规则" class="headerlink" title="7. 应用层（应用层+表示层+对话层）：定义应用间通信的规则"></a>7. 应用层（应用层+表示层+对话层）：定义应用间通信的规则</h3><p>传输层以及以下的层提供完整的通信服务，应用层是面向用户的一层。</p>
+<p>UDP：多媒体信息分发，如视频、语音、实时信息</p>
+<p>TCP：可靠信息传输，如金融交易、可靠通讯、MQ</p>
+<ol>
+<li><p>DNS详解：Domain Name System，域名系统</p>
+<p>将IP地址与域名对应，应用UDP协议</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810091426584.png" alt="image-20200810091426584"></p>
+<p>由点分割不同的域，顶级域、二级域、三级域</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810091608971.png" alt="image-20200810091608971"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810091650190.png" alt="image-20200810091650190"></p>
+<p>DNS服务部署在域名服务器上</p>
+<p>拿到域名，首先查询本地域名服务器找到对应的IP地址</p>
+<p>如果本地域名服务器没有，则查询根域名服务器-&gt;顶级域名服务器-&gt;域名服务器</p>
+</li>
+<li><p>DHCP协议详解：Dynamic Host Configuration Protocal，动态主机设置协议</p>
+<p>DHCP是一个局域网协议，应用UDP协议的应用层协议</p>
+<p>提供即插即用联网，不同地方的IP地址不用自己修改，DHCP会分配给你一个临时IP（一般是内网地址），有租期的概念，需要可以续租</p>
+<p>具体过程：</p>
+<p>主机利用UDP协议广播时下层IP数据报的目的IP地址全为1表示这是一个广播地址</p>
+<p>![image-20200810093734544](/Users/shuiyingying/Library/Application Support/typora-user-images/image-20200810093734544.png)</p>
+</li>
+<li><p>HTTP协议详解：HyperText Transfer Protocol，超文本传输协议</p>
+<p>http(s)://主机：端口/路径 （端口一般是80）</p>
+<p>HTTP协议是可靠的数据传输协议，底层是TCP传输协议，基于C/S架构</p>
+<ol>
+<li><p>Web服务器：硬件部分+软件部分</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810094554260.png" alt="image-20200810094554260"></p>
+<p>HTTP请求方法：</p>
+<ul>
+<li>GET：获取指定的服务端资源</li>
+<li>POST：提交数据到服务端</li>
+<li>DELETE：删除指定的服务端资源</li>
+<li>UPDATE：更新指定的服务端资源</li>
+</ul>
+<p>指定：</p>
+<ul>
+<li><p>地址指定</p>
+</li>
+<li><p>请求内容指定</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810095000848.png" alt="image-20200810095000848"></p>
+</li>
+</ul>
+<p>状态码：</p>
+<ul>
+<li>200-299 成功</li>
+<li>300-399 重定向</li>
+<li>400-499 客户端错误</li>
+<li>500-599 服务端错误</li>
+</ul>
+</li>
+<li><p>HTTP工作的结构</p>
+<ol>
+<li><p>Web缓存</p>
+<p>二八缓存原则，存储器层次结构（缓存、主存、辅存）</p>
+<p>将百分之二十的热门资源放在主存中，可以使用redis、memorycached等</p>
+</li>
+<li><p>Web代理：位于客户端和服务端之间</p>
+<p>正向代理：代表客户端访问服务器</p>
+<p>反向代理：代表服务器返回数据</p>
+<p>Nginx、HAProxy等</p>
+</li>
+<li><p>CDN（Content Delivery Network，内容分发网络）</p>
+</li>
+<li><p>爬虫</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>HTTPS协议详解</p>
+<p>HTTP是明文传输的，HTTPS(Secure)是安全的HTTP协议，端口一般是443</p>
+<ol>
+<li><p>加密模型：</p>
+<ul>
+<li>对称加密：加密和解密阶段使用一致的密钥加密</li>
+<li>非对称加密：加密和解密阶段使用不一致的密钥加密，A、B是拥有一定数学关系的一组密钥，一般分为私钥和公钥</li>
+</ul>
+</li>
+<li><p>数字证书：可信任组织颁发给特定对象的认证</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810100826034.png" alt="image-20200810100826034"></p>
+</li>
+<li><p>SSL：安全套接层，位于传输层和应用层之间，提供数据安全和数据完整服务，对传输数据进行加密后传输</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810101027779.png" alt="image-20200810101027779"></p>
+<p>SSL安全参数握手：</p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810101250421.png" alt="image-20200810101250421"></p>
+<p><img src="/Users/shuiyingying/blog/source/photos/image-20200810101408468.png" alt="image-20200810101408468"></p>
+<p>在确认加密算法建立连接阶段使用了非对称加密，在两方消息相同后使用加密算法和相同的随机数各自生成相同的对称密钥，用对称密钥进行通信</p>
+</li>
+</ol>
 </li>
 </ol>
 
@@ -1120,7 +1314,7 @@ List  Set Queue-Deque      SortedMap         ListIterator
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/28/hexo%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/07/21/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">展开全文 >></a>
         </p>
       
 
@@ -1150,39 +1344,86 @@ List  Set Queue-Deque      SortedMap         ListIterator
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-计算机组成原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/26/hello-world/">Hello World</a>
+      <a class="article-title" href="/2020/07/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
     </h1>
   
 
         
-        <a href="/2020/02/26/hello-world/" class="archive-article-date">
-  	<time datetime="2020-02-26T01:17:04.116Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-26</time>
+        <a href="/2020/07/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="archive-article-date">
+  	<time datetime="2020-07-20T13:59:26.085Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h2 id="计算机组成原理"><a href="#计算机组成原理" class="headerlink" title="计算机组成原理"></a>计算机组成原理</h2><ol>
+<li><p>计算机的体系和结构</p>
+<ol>
+<li>冯诺伊曼体系：cpu=运算器+控制器<ul>
+<li>必须要有一个存储器</li>
+<li>必须要有一个控制器</li>
+<li>必须使用运算器</li>
+<li>必须有输入/输出设备</li>
+</ul>
+</li>
+<li>现代计算机的结构：cpu=运算器+控制器+存储器</li>
+</ol>
+</li>
+<li><p>计算机的层次与编程语言</p>
+<ol>
+<li><p>程序翻译与程序解析</p>
+<p>较为高级的计算机语言L1、较为低级的计算机语言L0</p>
+<p>程序编译：使用L1编程，计算机实际执行L0，从L1生成L0的过程，通过编                    译器完成（生成新的L0程序）</p>
+<p>程序解析：L1作为使用L0实现的程序的输入，输出L0语言，通过解释器完                    成（不生成新的L0程序，是由L1程序转化为逻辑执行）</p>
+<p>编译型语言：c/c++，golong</p>
+<p>解析型语言：python，php，javascript</p>
+<p>翻译+解析：.java到.class文件是编译过程（javac），</p>
+<p>​                        .class到机器码是解析过程（JVM虚拟机中的解析器）</p>
+</li>
+<li><p>计算机的层次与编程语言：</p>
+<p>层次：</p>
+<ul>
+<li>硬件逻辑层</li>
+<li>微程序机器层：编程语言是微指令集，直接交给电子电路</li>
+<li>传统机器层：CPU集，即机器指令，由微程序进行解析，和硬件直接相关（一条机器指令对应一条微程序，一条微程序对应一组微指令）</li>
+<li>操作系统层：软件和硬件间的适配层</li>
+<li>汇编语言层：汇编语言，可以由汇编器翻译成可直接执行的机器语言</li>
+<li>高级语言层：java、C/C++等</li>
+<li>应用层</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>计算机的计算单位</p>
+<ol>
+<li><p>容量单位：M G T</p>
+<p>1 word =2 byte = 16 bits</p>
+<p>KB=1024 B (2^10)</p>
+<p>MB=1024 KB</p>
+<p>GB=1024 KB</p>
+<p>TB PB EB</p>
+<p><em>硬盘商一般使用1000进位标记，所以移动硬盘500G格式化后就是465G(500X1000^3/1024^3)</em></p>
+</li>
+<li><p>速度单位</p>
+<ol>
+<li><p>网络速度：100M=100M/s=100Mbps=100Mbit/s=(100/8)MB/S</p>
+</li>
+<li><p>CPU频率：体现为CPU的时钟频率，一般单位是Hz，即秒分之一，每秒钟周期性变动重复次数的计量</p>
+<p>2GHz=2*1000^3Hz=每秒高低电平变换20亿次</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
 
       
 
@@ -1195,7 +1436,7 @@ List  Set Queue-Deque      SortedMap         ListIterator
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/26/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/07/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">展开全文 >></a>
         </p>
       
 
@@ -1225,6 +1466,713 @@ List  Set Queue-Deque      SortedMap         ListIterator
 
 
   
+    <article id="post-枚举类型：ENUM" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/20/%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%EF%BC%9AENUM/">枚举类型：ENUM</a>
+    </h1>
+  
+
+        
+        <a href="/2020/07/20/%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%EF%BC%9AENUM/" class="archive-article-date">
+  	<time datetime="2020-07-20T10:04:37.971Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>枚举类型：ENUM</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public enum SeckillStateEnum &#123;</span><br><span class="line">    SUCCESS(1,&quot;秒杀成功&quot;),</span><br><span class="line">    END(0,&quot;秒杀结束&quot;),</span><br><span class="line">    REPEAT_KILL(-1,&quot;重复秒杀&quot;),</span><br><span class="line">    INNER_ERROR(-2,&quot;系统异常&quot;),</span><br><span class="line">    DATA_REWRITE(-3,&quot;数据篡改&quot;);</span><br><span class="line">    private int state;</span><br><span class="line">    private String stateInfo;</span><br><span class="line"></span><br><span class="line">    SeckillStateEnum(int state, String stateInfo) &#123;</span><br><span class="line">        this.state &#x3D; state;</span><br><span class="line">        this.stateInfo &#x3D; stateInfo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getState() &#123;</span><br><span class="line">        return state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getStateInfo() &#123;</span><br><span class="line">        return stateInfo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">		&#x2F;&#x2F;values方法将枚举类转化为一个枚举类型的数组</span><br><span class="line">    public static SeckillStateEnum stateOf(int index)&#123;</span><br><span class="line">        for(SeckillStateEnum state:values())&#123;</span><br><span class="line">            if(state.getState()&#x3D;&#x3D;index)&#123;</span><br><span class="line">                return state;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/20/%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%EF%BC%9AENUM/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-07/Redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/12/07/Redis/">07/Redis</a>
+    </h1>
+  
+
+        
+        <a href="/2020/07/12/07/Redis/" class="archive-article-date">
+  	<time datetime="2020-07-12T12:01:02.504Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h3 id="1-概念：NOSQL系列的非关系型数据库"><a href="#1-概念：NOSQL系列的非关系型数据库" class="headerlink" title="1.  概念：NOSQL系列的非关系型数据库"></a>1.  概念：NOSQL系列的非关系型数据库</h3><ol>
+<li><p>关系型数据库：</p>
+<ul>
+<li>数据之间有关联关系</li>
+<li>数据存储在硬盘的文件上</li>
+</ul>
+</li>
+<li><p>非关系型数据库：</p>
+<ul>
+<li><p>数据之间没有关联关系，存储key：value形式</p>
+</li>
+<li><p>数据存储在内存中</p>
+<p>操作关系型数据库是非常耗时的：利用缓存思想解决这个问题（从缓存中获取数据），常用非关系型数据库作为缓存（hashmap等缓存只能在JVM中存在），一般会将数据存储在关系型数据库中，在非关系型数据库中备份存储关系型数据库</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-redis的数据结构"><a href="#2-redis的数据结构" class="headerlink" title="2. redis的数据结构"></a>2. redis的数据结构</h3><p>redis存储的是：key，value形式的数据，其中key都是字符串，value有5种不同的数据结构:</p>
+<ul>
+<li>字符串类型：string</li>
+<li>哈希类型hash：map格式</li>
+<li>列表类型list：linkedlist格式</li>
+<li>集合类型set</li>
+<li>有序集合类型sortedset</li>
+</ul>
+<ol>
+<li><p>字符串类型 string</p>
+<ol>
+<li>存储： set key val</li>
+<li>获取 ：get key</li>
+<li>删除：del key</li>
+</ol>
+</li>
+<li><p>哈希类型 hash</p>
+<ol>
+<li><p>存储：hset key field value</p>
+</li>
+<li><p>获取：hget key field ：获取指定field对应的值</p>
+<p>​            hgetall key：获取所有的键值对</p>
+</li>
+<li><p>删除：hdel key field</p>
+</li>
+</ol>
+</li>
+<li><p>列表类型 list：</p>
+<p>字符串列表按照插入顺序排序，可以添加一个元素到列表的头部（左边）或者尾部（右边）</p>
+<ol>
+<li>存储：<ol>
+<li>lpush key value：将元素加入列表左边</li>
+<li>rpush key value：将元素加入列表右边</li>
+</ol>
+</li>
+<li>获取：<ol>
+<li>lrange key start end：范围获取</li>
+</ol>
+</li>
+<li>删除<ol>
+<li>lpop key：删除列表最左边的元素，并将元素返回</li>
+<li>rpop key：删除列表最右边的元素，并将元素返回</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>集合类型 set：不允许重复元素</p>
+<ol>
+<li>存储：sadd key value</li>
+<li>获取：smembers key：获取set集合中所有元素</li>
+<li>删除：srem key value：删除set集合中的某个元素</li>
+</ol>
+</li>
+<li><p>有序集合 sortedset：不允许重复元素，且元素有序，每个元素都关联到一个double类型的分数</p>
+<ol>
+<li>存储：zadd key score value</li>
+<li>获取：zrange key start end with scores</li>
+<li>删除：zrem key value</li>
+</ol>
+</li>
+<li><p>通用命令：</p>
+<ol>
+<li>Keys *：查询所有的键</li>
+<li>type key：获取键对应的value的类型</li>
+<li>del key：删除指定的key value</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-持久化"><a href="#3-持久化" class="headerlink" title="3. 持久化"></a>3. 持久化</h3><ol>
+<li><p>redis是一个内存数据库，当redis服务器重启或者电脑重启，数据会丢失，我们可以将redis内存中的数据持久化保存到硬盘和文件中</p>
+</li>
+<li><p>redis持久化机制</p>
+<ol>
+<li><p>RDB：默认方式，不需要进行配置，默认使用这种机制</p>
+<p>在一定的间隔时间中，检测key的变化情况，然后持久化数据</p>
+<ol>
+<li><p>编辑redis.conf文件</p>
+<p>after 900 sec (15 min) if at least 1 key changed</p>
+<p>after 300 sec (5 min) if at least 10 keys changed</p>
+<p>after 60 sec if at least 10000 keys changed</p>
+<p>save 900 1<br>save 300 10<br>save 60 10000</p>
+</li>
+<li><p>重新启动redis服务器，并指定配置文件名称 redis-server redis.conf</p>
+</li>
+</ol>
+</li>
+<li><p>AOF：日志记录方式，可以记录每一条命令的操作，可以每一次命令操作后持久化数据</p>
+<ol>
+<li><p>编辑redis.conf文件</p>
+<p>appendonly no(关闭) -&gt;yes</p>
+<p>appendfsync always 每一次操作都持久化</p>
+<p>appendfsync everysec 每一秒持久化</p>
+<p>appendfsync no 不持久化</p>
+</li>
+<li><p>重新启动redis服务器，并指定配置文件名称 redis-server redis.conf</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="4-Java客户端：Jedis"><a href="#4-Java客户端：Jedis" class="headerlink" title="4. Java客户端：Jedis"></a>4. Java客户端：Jedis</h3><p>Jedis是一款Java操作redis数据库的工具。</p>
+<p>使用步骤：</p>
+<ol>
+<li><p>相关jar包</p>
+</li>
+<li><p>快速入门</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Jedis jedis&#x3D;new Jedis(&quot;localhost&quot;,6379);可以空，默认</span><br><span class="line">jedis.set(&quot;key&quot;,&quot;val&quot;);</span><br><span class="line">jedis.close;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>jedis操作redis中数据结构：方法名和名字一模一样</p>
+<ol>
+<li>字符串：set get del setex(“key”,20,”val”)：存入键值对，20s后自动删除</li>
+<li>hash：hset hget hgetAll(返回Map&lt;String,String&gt;) hdel</li>
+<li>list：lpush rpush lpop rpop lrange</li>
+<li>set：sadd smembers（返回set集合） sdel</li>
+<li>sortedset：zadd zrange</li>
+</ol>
+</li>
+</ol>
+<h3 id="5-Jedis连接池：JedisPool"><a href="#5-Jedis连接池：JedisPool" class="headerlink" title="5. Jedis连接池：JedisPool"></a>5. Jedis连接池：JedisPool</h3><ol>
+<li><p>使用：</p>
+<ol>
+<li><p>创建JedisPool连接池对象</p>
+</li>
+<li><p>调用方法：getResource()方法获取Jedis连接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;创建一个配置对象</span><br><span class="line">       JedisPoolConfig config&#x3D;new JedisPoolConfig();</span><br><span class="line">       config.setMaxTotal(50);</span><br><span class="line">       config.setMaxIdle(10);</span><br><span class="line">      </span><br><span class="line">       &#x2F;&#x2F;获取链接</span><br><span class="line">       JedisPool jedisPool&#x3D;new JedisPool(config,&quot;localhost&quot;,6379);</span><br><span class="line">       &#x2F;&#x2F;操作</span><br><span class="line">       Jedis jedis &#x3D; jedisPool.getResource();</span><br><span class="line">       jedis.set(&quot;username&quot;,&quot;zhangsan&quot;);</span><br><span class="line">       &#x2F;&#x2F;关闭链接</span><br><span class="line">       jedis.close();</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="6-案例："><a href="#6-案例：" class="headerlink" title="6. 案例："></a>6. 案例：</h3><ol>
+<li>需求：提供index.html页面，页面中有一个省份下拉列表，当页面加载完后，发送ajax请求加载所有省份</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/12/07/Redis/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-算法笔记_连续子数组和" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/27/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0_%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/">算法笔记_连续子数组和</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/27/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0_%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/" class="archive-article-date">
+  	<time datetime="2020-05-27T14:12:09.766Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="连续子数组和"><a href="#连续子数组和" class="headerlink" title="连续子数组和"></a>连续子数组和</h2><p>思路：前缀和法</p>
+<p>将连续子数组和问题简化为前缀和之差问题，注意添加<code>preSum[0]=0</code>用于计算每一位前缀和其本身。</p>
+<h4 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h4><h4 id="560-和为K的子数组"><a href="#560-和为K的子数组" class="headerlink" title="560. 和为K的子数组"></a><a href="https://leetcode-cn.com/problems/subarray-sum-equals-k/" target="_blank" rel="noopener">560. 和为K的子数组</a></h4><p>思路：转化为前缀和之差为K。</p>
+<h4 id="523-连续的子数组和"><a href="#523-连续的子数组和" class="headerlink" title="523. 连续的子数组和"></a><a href="https://leetcode-cn.com/problems/continuous-subarray-sum/" target="_blank" rel="noopener">523. 连续的子数组和</a></h4><p>思路：要求子数组和和为K的倍数，注意两个前缀和除以K的模相等时两个前缀和之差代表的子数组即为K的倍数，可以使用前缀和+哈希表存储模的方法。</p>
+<h4 id="974-和可被-K-整除的子数组"><a href="#974-和可被-K-整除的子数组" class="headerlink" title="974. 和可被 K 整除的子数组"></a><a href="https://leetcode-cn.com/problems/subarray-sums-divisible-by-k/" target="_blank" rel="noopener">974. 和可被 K 整除的子数组</a></h4><p>思路：和上一题类似，当有N个前缀和和除以K模相同时，可被K整除的子数组个数为N*（N-1）/2。</p>
+<h4 id="1371-每个元音包含偶数次的最长子字符串"><a href="#1371-每个元音包含偶数次的最长子字符串" class="headerlink" title="1371. 每个元音包含偶数次的最长子字符串"></a><a href="https://leetcode-cn.com/problems/find-the-longest-substring-containing-vowels-in-even-counts/" target="_blank" rel="noopener">1371. 每个元音包含偶数次的最长子字符串</a></h4><p>思路：要求子字符串中每个元音字母都出现了偶数次，可以利用前缀和记录以每一位为结束位的子字符串包含的元音字母次数，注意偶数-偶数=偶数，奇数-奇数=偶数，当两位前缀和元音字母出现次数均相同时即说明两位之间的子字符串包含偶数次元音。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/27/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0_%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Spring基础复盘" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/26/Spring%E5%9F%BA%E7%A1%80%E5%A4%8D%E7%9B%98/">Spring基础复盘</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/26/Spring%E5%9F%BA%E7%A1%80%E5%A4%8D%E7%9B%98/" class="archive-article-date">
+  	<time datetime="2020-05-26T14:00:08.179Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Spring基础复盘：</p>
+<ol>
+<li>IoC（Inverse Of Control)：反转控制</li>
+</ol>
+<p>问题：创建对象时直接使用new关键字，类之间的耦合度很高</p>
+<p>​            （在三层架构中表现为业务层依赖持久层，表现层依赖业务层）</p>
+<p>目的：解耦</p>
+<p>如何解决：工厂模式（通过反射来创建对象）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/26/Spring%E5%9F%BA%E7%A1%80%E5%A4%8D%E7%9B%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Day08.幽默的运用和布朗定律" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/18/Day08.%E5%B9%BD%E9%BB%98%E7%9A%84%E8%BF%90%E7%94%A8%E5%92%8C%E5%B8%83%E6%9C%97%E5%AE%9A%E5%BE%8B/">Day08.幽默的运用和布朗定律</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/Day08.%E5%B9%BD%E9%BB%98%E7%9A%84%E8%BF%90%E7%94%A8%E5%92%8C%E5%B8%83%E6%9C%97%E5%AE%9A%E5%BE%8B/" class="archive-article-date">
+  	<time datetime="2020-05-18T11:57:33.661Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Day08.幽默的运用和布朗定律</p>
+<p>【课程内容】</p>
+<ol>
+<li>幽默与有趣</li>
+</ol>
+<p>幽默的本质是讽刺和刻薄，它是一把双刃剑，就像做菜时的鸡精，必须把握好频率和时机。</p>
+<p>日常生活中可以有趣，但是不要幽默。有趣是自我的故事（自己身边的事），讲和自我有关的趣事：</p>
+<ol>
+<li>故事本身比较有趣（多发掘自己生活中有趣的事，有趣的事一定要多讲出来）；</li>
+<li>乏味的故事以有趣的方法讲出来（比较难）。</li>
+</ol>
+<p>高级的有趣：向罗老师学有趣</p>
+<ol start="2">
+<li>深入沟通</li>
+</ol>
+<p>深入沟通的原则：布朗定律（每个人都有个心锁，只要能打开一次，你就能反复使用）</p>
+<p>当我们与人沟通时，比投其所好、共同话题更重要的是先观察和思考，一是观察大致的性格，而是观察大概的兴趣爱好。具体来说，我们可以：</p>
+<ol>
+<li><p>准备通用话题，以备万一（普通人类都感兴趣的话题）：便于双方交流</p>
+</li>
+<li><p>普通人类都感兴趣的事件：便于自身表达</p>
+<p>如果自己在普通人都感兴趣的事有所成就，就可以获得一定的影响力。根据喜好交友的范围比较狭窄，但如果自己擅长某一种人群内部通用的感兴趣的事情，就可以扩展人脉。（比如健康、人人爱美、职业规划、子女教育、体型管理等）</p>
+</li>
+<li><p>事先观察，知己知彼：注意观察身边人的兴趣爱好，提前出击</p>
+</li>
+<li><p>通用情绪：</p>
+<p>沟通时对方可能处于三种状态：</p>
+<ol>
+<li><p>愿意说不想听：抛出让他发挥的话题</p>
+</li>
+<li><p>愿意听不想说：找到一些有趣的话题，引申让他发挥</p>
+</li>
+<li><p>不愿意听不愿意说的人</p>
+</li>
+</ol>
+<p>如何判断对方的状态？1. 判断对方的眼神 2. 情绪优先（如果对方情绪不对，一定要先抚慰情绪，再交流）</p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/18/Day08.%E5%B9%BD%E9%BB%98%E7%9A%84%E8%BF%90%E7%94%A8%E5%92%8C%E5%B8%83%E6%9C%97%E5%AE%9A%E5%BE%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-07/设计模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/18/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/18/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2020-05-18T07:24:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-面向对象思想设计原则"><a href="#1-面向对象思想设计原则" class="headerlink" title="1. 面向对象思想设计原则"></a>1. 面向对象思想设计原则</h3><ol>
+<li><p>单一职责原则：一个类一个职责，高内聚低耦合</p>
+</li>
+<li><p>开闭原则：一个对象对扩展开放，对修改关闭（对类的改动是通过增加代码进行的，而不是修改现有的代码）</p>
+</li>
+<li><p>里氏替换原则：在任何父类出现的地方都可以用它的子类来替代</p>
+</li>
+<li><p>依赖注入原则：要依赖于抽象，不要依赖于具体实现</p>
+</li>
+<li><p>接口分离原则：不应该强迫程序依赖它们不需要使用的方法，即一个接口不需要提供太多的功能</p>
+</li>
+<li><p>迪米特原则：一个对象应当对其他对象尽可能少的了解（降低各个对象之间的耦合）</p>
+</li>
+</ol>
+<h3 id="2-设计模式"><a href="#2-设计模式" class="headerlink" title="2. 设计模式"></a>2. 设计模式</h3><ol>
+<li><p>设计模式的分类：</p>
+<ol>
+<li><p>创建型模式：对象的创建</p>
+<p>简单工厂模式、工厂方法模式、抽象工厂模式、建造者模式、原型模式、单例模式（6）</p>
+</li>
+<li><p>结构型模式：对象的组成（结构）</p>
+<p>外观模式、适配器模式、代理模式、装饰模式、桥接模式、组合模式、享元模式（7）</p>
+</li>
+<li><p>行为型模式：对象的行为</p>
+<p>模版方法模式、观察者模式、状态模式、职责链模式、命令模式、访问者模式、策略模式、备忘录模式、迭代器模式、解释器模式（10）</p>
+</li>
+</ol>
+</li>
+<li><p>简单工厂模式：静态工厂方法模式，定义一个具体的工厂类负责创建一些类的实例</p>
+<p>优点：客户端不需要负责对象的创建，明确了类的职责</p>
+<p>缺点：如果有新的对象增加，或某些对象的创建方式不同，简单工厂类需要经常修改</p>
+</li>
+<li><p>工厂方法模式：工厂方法模式中抽象工厂类负责定义创建对象的接口，具体对象的创建工作由继承抽象工厂的具体类实现（小工厂）</p>
+</li>
+<li><p>单例设计模式：确保类的内存中只有一个对象，该实例必须自动创建，并且对外提供</p>
+<p>如何保证类在内存中只有一个对象呢？</p>
+<ol>
+<li>构造方法私有</li>
+<li>在成员位置自己创建一个对象</li>
+<li>通过一个公共的方法提供访问（静态方法）</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//饿汉式：类一加载就创建对象(不会出问题的单例模式)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="title">Student</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> Student s=<span class="keyword">new</span> Student();</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="title">getStudent</span><span class="params">()</span></span>&#123;</span><br><span class="line">				<span class="keyword">return</span> s;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//懒汉式：用的时候才去创建对象（可能会出问题的单例模式）:1.延迟加载 2.线程安全问题</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="title">Student</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> Student s=<span class="keyword">null</span>;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="title">getStudent</span><span class="params">()</span></span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(s==<span class="keyword">null</span>)&#123;</span><br><span class="line">          <span class="comment">//线程不安全时可能多个线程都进行到这里</span></span><br><span class="line">						s=<span class="keyword">new</span> Student();</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span> s;</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>单例模式的Java代码体现：Runtime类</p>
+<p>每个Java应用程序都有一个Runtime类实例，使应用程序能够与其运行的环境相连接</p>
+<p>exec(String command)（dos命令）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/18/07/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-霸霸连" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/13/%E9%9C%B8%E9%9C%B8%E8%BF%9E/">霸霸连</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/13/%E9%9C%B8%E9%9C%B8%E8%BF%9E/" class="archive-article-date">
+  	<time datetime="2020-05-13T10:48:23.016Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>霸霸连</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/13/%E9%9C%B8%E9%9C%B8%E8%BF%9E/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
@@ -1322,15 +2270,79 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">HTTP协议</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">JavaWeb</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Filter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Listener</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">JDBC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">JavaScript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Junit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Maven</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Servlet</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">框架</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xml</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">会话技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JSP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">HTML</a>
               </li>
             
             <div class="clearfix"></div>
